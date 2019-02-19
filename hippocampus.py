@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+import sqlite3
+
 class ShallowMemory:
     f1 = 0;
     intensity = 0;
@@ -12,19 +14,30 @@ class ShallowMemory:
         self.f1 = value;
 
 
-
-
 class Hippocampus:
 
     toDeep = 5#转为深记忆阈值
     shallowMemorys = []
+
+    def __init__(self):
+        self.conn = sqlite3.connect("memory.db")
+        self.cursor = self.conn.cursor()
+        sql = "select * from shallow"
+
+        # shallows = self.cursor.fetchall()
+        for row in self.cursor.execute(sql):
+            print(row)
+            shallow = ShallowMemory(row[0]);
+            shallow.intensity = row[2]
+            self.shallowMemorys.append(shallow);
+        print("读取浅记忆完成...", len(self.shallowMemorys))
 
     def collect(self,feature):
         Hf, Wf = feature.shape
         count=0;
         for i in range(Hf):
             for j in range(Wf):
-                count+= feature[i][j];
+                count += feature[i][j];
         #分档
         if(count<50):
             self.check(0);
@@ -65,7 +78,11 @@ class Hippocampus:
 
 
     def save(self):
-        print("保存海马体",self.toDeep);
-
-
-
+        print("保存海马体...");
+        self.cursor.execute('delete from shallow')#清空
+        for i in range(len(self.shallowMemorys)):
+            vertical = self.shallowMemorys[i].f1
+            intensity = self.shallowMemorys[i].intensity
+            self.cursor.execute("insert into shallow values(?,?,?)", (vertical, 'suixin', intensity))
+            self.conn.commit()
+            self.conn.close()

@@ -17,6 +17,7 @@ def foo():
     print("文件", files)
     lastimg = np.zeros((imgHeight,imgWidth))
     activateimg = np.zeros((imgHeight,imgWidth))
+    #创建海马体
     hipp = hippocampus.Hippocampus();
     for fl in files:
         image = cv2.imread(fl)

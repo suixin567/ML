@@ -9,8 +9,8 @@ import hippocampus
 train_path='training_data'
 imgWidth=500
 imgHeight=300
-kernel = np.array([[1,0,-1],[1,0,-1],[1,0,-1]])
-
+kernelV = np.array([[1,0,-1],[1,0,-1],[1,0,-1]])
+kernelH = np.array([[1,1,1],[0,0,0],[-1,-1,-1]])
 def foo():
     path = os.path.join(train_path, '*g')  # 找到图片路径
     files = glob.glob(path)  # 得到文件
@@ -39,16 +39,23 @@ def foo():
         # cv2.imshow('单通道图像', b)
         # cv2.waitKey(1000)
         #获取特征
-        feature = tools.tool.conv_same(activateimg,kernel)
+        featureV = tools.tool.conv_same(activateimg,kernelV)
         #print("竖向检测完成后",res);
 
-        feature = np.clip(feature,0,255)
+        featureV = np.clip(featureV,0,255)
         #res2 = res2.astype(np.uint8)
         #print("截取后", res2)
-        cv2.imshow('v-result', feature)
-        cv2.moveWindow("v-result", 0, 350)
+        cv2.imshow('featureV', featureV)
+        cv2.moveWindow("featureV", 0, 350)
         cv2.waitKey(1000)
-        hipp.collect(feature);
+        featureH = tools.tool.conv_same(activateimg, kernelH)
+        featureH = np.clip(featureH, 0, 255)
+        cv2.imshow('featureH', featureH)
+        cv2.moveWindow("featureH", 0, 750)
+        cv2.waitKey(1000)
+
+        hipp.collect(featureV,featureH);
+
     #持久化海马体
     hipp.save();
 

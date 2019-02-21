@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import numpy as np
 # import tool
 #
@@ -14,14 +15,22 @@ import numpy as np
 # print(end_2)
 
 
-# 能量分档
-def getLadderScore(value):
-    print("aaa", value);
-    total = 500 * 300 * 255;
-    oneStep = total / 100;
-    print("bbb", oneStep);
-    score = value // oneStep;
-    print("ccc", score);
 
 
-getLadderScore(2000000);
+import os
+import glob
+
+def parseFile(path):
+    for _, dirs, _ in os.walk(path):
+        if (len(dirs)>0):
+            print('物体列表', dirs)  #子目录
+            for dir in dirs:
+                files = os.listdir(os.path.join(path, dir))
+                files.sort(key=lambda x: int(x[:-4]))
+                print(files);
+
+
+
+
+train_path='training_data'
+parseFile(train_path);

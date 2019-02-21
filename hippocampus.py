@@ -2,12 +2,14 @@
 import sqlite3
 
 class ShallowMemory:
+    objName=""
     featureV = 0;
     featureH=0;
     intensity = 0;
 
     # 创建一条新的浅记忆
-    def __init__(self, fv,fh):
+    def __init__(self,objName, fv,fh):
+        self.objName = objName;
         self.featureV = fv;
         self.featureH = fh;
 
@@ -27,13 +29,13 @@ class Hippocampus:
 
         # shallows = self.cursor.fetchall()
         for row in self.cursor.execute(sql):
-            print(row)
+            #print(row)#打印每一条记忆
             shallow = ShallowMemory(row[2], row[3])
             shallow.intensity = row[1]
             self.shallowMemorys.append(shallow)
         print("读取浅记忆完成...", len(self.shallowMemorys))
 
-    def collect(self,featureV,featureH):
+    def collect(self,objName,featureV,featureH):
         Hf, Wf = featureV.shape
         count=0;
         for i in range(Hf):
@@ -48,7 +50,7 @@ class Hippocampus:
         # 分档
         score2 = self.getLadderScore(count2);
         # 判断为旧记忆还是新记忆
-        self.check(score,score2);
+        self.check(objName,score,score2);
 
 
     # 能量分档
@@ -59,7 +61,7 @@ class Hippocampus:
         return score;
 
     #判断为旧记忆还是新记忆
-    def check(self,featureV,featureH):
+    def check(self,objName,featureV,featureH):
         # 判断是否已经存在此记忆
         isExist = False;
         for i in range(len(self.shallowMemorys)):
@@ -70,8 +72,8 @@ class Hippocampus:
                 if(self.shallowMemorys[i].intensity>=self.toDeep):
                     print("这个记忆转为深记忆", self.shallowMemorys[i].featureV, self.shallowMemorys[i].featureH)
         if(isExist == False):
-            print("----------------------------->>>", featureV, featureH);
-            newMemery = ShallowMemory(featureV,featureH);
+            print("----------------------------->>>",objName, featureV, featureH);
+            newMemery = ShallowMemory(objName,featureV,featureH);
             self.shallowMemorys.append(newMemery);
 
 
@@ -79,9 +81,11 @@ class Hippocampus:
         print("保存海马体...");
         self.cursor.execute('delete from shallow')#清空
         for i in range(len(self.shallowMemorys)):
+            objName = self.shallowMemorys[i].objName
+            intensity = self.shallowMemorys[i].intensity
             featureV = self.shallowMemorys[i].featureV
             featureH = self.shallowMemorys[i].featureH
-            intensity = self.shallowMemorys[i].intensity
-            self.cursor.execute("insert into shallow values(?,?,?,?)", ('suixin', intensity, featureV, featureH))
+
+            self.cursor.execute("insert into shallow values(?,?,?,?)", (objName, intensity, featureV, featureH))
             self.conn.commit()
         self.conn.close()

@@ -1,6 +1,8 @@
 import numpy as np
+from numba import jit
 
 #same卷积
+@jit
 def conv_same(image, kernel):
     Hi, Wi = image.shape
     Hk, Wk = kernel.shape

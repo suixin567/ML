@@ -41,7 +41,7 @@ def train(objName,files):
 
         cv2.imshow('activate', activateimg)
         cv2.moveWindow("activate", 0, 0)
-        cv2.waitKey(1000)
+        cv2.waitKey(1)
         #print(activateimg);
 
         # cv2.imshow('单通道图像', b)
@@ -55,12 +55,12 @@ def train(objName,files):
         #print("截取后", res2)
         cv2.imshow('featureV', featureV)
         cv2.moveWindow("featureV", 0, 350)
-        cv2.waitKey(1000)
+        cv2.waitKey(100)
         featureH = tools.tool.conv_same(activateimg, kernelH)
         featureH = np.clip(featureH, 0, 255)
         cv2.imshow('featureH', featureH)
         cv2.moveWindow("featureH", 0, 750)
-        cv2.waitKey(1000)
+        cv2.waitKey(1)
 
         hipp.collect(objName,featureV,featureH);
 

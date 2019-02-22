@@ -30,7 +30,7 @@ class Hippocampus:
         # shallows = self.cursor.fetchall()
         for row in self.cursor.execute(sql):
             #print(row)#打印每一条记忆
-            shallow = ShallowMemory(row[2], row[3])
+            shallow = ShallowMemory(row[0],row[2], row[3])
             shallow.intensity = row[1]
             self.shallowMemorys.append(shallow)
         print("读取浅记忆完成...", len(self.shallowMemorys))
@@ -68,7 +68,7 @@ class Hippocampus:
             if featureV == self.shallowMemorys[i].featureV and featureH == self.shallowMemorys[i].featureH:
                 self.shallowMemorys[i].intensity += 1
                 isExist = True;
-                print("+++++++++++++++++++++++++++++++>>>", featureV, featureH)
+                print("+++++++++++++++++++++++++++++++>>>", objName, featureV, featureH)
                 if(self.shallowMemorys[i].intensity>=self.toDeep):
                     print("这个记忆转为深记忆", self.shallowMemorys[i].featureV, self.shallowMemorys[i].featureH)
         if(isExist == False):

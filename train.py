@@ -55,7 +55,7 @@ def train(objName,files):
         #print("截取后", res2)
         cv2.imshow('featureV', featureV)
         cv2.moveWindow("featureV", 0, 350)
-        cv2.waitKey(100)
+        cv2.waitKey(1)
         featureH = tools.tool.conv_same(activateimg, kernelH)
         featureH = np.clip(featureH, 0, 255)
         cv2.imshow('featureH', featureH)

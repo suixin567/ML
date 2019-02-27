@@ -33,35 +33,29 @@ def train(objName,files):
         rimg = cv2.split(image)[0]
         rimg = cv2.resize(rimg, (imgWidth,imgHeight ), 0, 0, cv2.INTER_LINEAR)
         print("resize尺寸", rimg.shape);
-        # image = image.astype(np.float32)
         activateimg = rimg - lastimg
         lastimg = rimg
         activateimg = activateimg.astype(np.uint8)#此句不可以省略。
-        #print(activateimg);
 
         cv2.imshow('activate', activateimg)
         cv2.moveWindow("activate", 0, 0)
         cv2.waitKey(1)
-        #print(activateimg);
 
-        # cv2.imshow('单通道图像', b)
-        # cv2.waitKey(1000)
-        #获取特征
+        #获取v特征
         featureV = tools.tool.conv_same(activateimg,kernelV)
-        #print("竖向检测完成后",res);
-
         featureV = np.clip(featureV,0,255)
-        #res2 = res2.astype(np.uint8)
-        #print("截取后", res2)
-        cv2.imshow('featureV', featureV)
-        cv2.moveWindow("featureV", 0, 350)
-        cv2.waitKey(1)
+        # cv2.imshow('featureV', featureV)
+        # cv2.moveWindow("featureV", 0, 350)
+        # cv2.waitKey(1)
+
+        #获取h特征
         featureH = tools.tool.conv_same(activateimg, kernelH)
         featureH = np.clip(featureH, 0, 255)
-        cv2.imshow('featureH', featureH)
-        cv2.moveWindow("featureH", 0, 750)
-        cv2.waitKey(1)
+        # cv2.imshow('featureH', featureH)
+        # cv2.moveWindow("featureH", 0, 750)
+        # cv2.waitKey(1)
 
+        #进入海马体
         hipp.collect(objName,featureV,featureH);
 
 

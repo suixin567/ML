@@ -6,11 +6,11 @@ from numba import jit
 def conv_same(image, kernel):
     Hi, Wi = image.shape
     Hk, Wk = kernel.shape
-    print("准备卷积",image.shape,kernel.shape);
+    #print("准备卷积",image.shape,kernel.shape);
 
     temp_paddinged = np.zeros((Hi + 2, Wi +2))  # 所得为 full 矩阵
     Hp, Wp = temp_paddinged.shape
-    print("padding尺寸",temp_paddinged.shape);
+    #print("padding尺寸",temp_paddinged.shape);
     temp_m = np.zeros((Hi, Wi))
     #进行padding
     for i in range(Hp):
@@ -21,7 +21,7 @@ def conv_same(image, kernel):
             else:
                 #print("不为零",i,j);
                 temp_paddinged[i][j] = image[i-1][j-1]
-    print("padding完成:\n")
+    #print("padding完成:\n")
     #print( temp_paddinged)
 
 
@@ -30,12 +30,13 @@ def conv_same(image, kernel):
             if (k <= Hp - Hk and l <= Wp - Wk):
                 temp = 0
                 # 通常来说，卷积核的尺寸远小于图片尺寸，同时卷积满足交换律，为了加快运算，可用h*f 代替 f*h 进行计算
+
                 for m in range(Hk):
                     for n in range(Wk):
                             temp += temp_paddinged[k+m][l+n] * kernel[m][n]
                             #print("位置",k,l,m,n,"相乘的数是：",temp_paddinged[k+m][l+n] , kernel[m][n],"结果:" ,temp_paddinged[k+m][l+n] * kernel[m][n]);
-
-                temp_m[k][l] = temp
+                if image[k,l] >40:#这里会有问题，让浅的关键点一律消失了。todo
+                    temp_m[k][l] = temp
                 #print("得到一个值",temp);
     return temp_m
     # # 截取出 same 矩阵 （输出尺寸同输入）
@@ -77,7 +78,6 @@ def pool(image):
     pooled = np.zeros((int(Hi / 2),int(Wi / 2)))
 
     Hp,Wp = pooled.shape
-    print(Hp,Wp)
     for i in range(Hp):
         for j in range(Wp):
             count = 0
@@ -91,12 +91,11 @@ def pool(image):
 
 
 
-#突出角点，利用3x3矩阵，超过3为角点。
+#突出角点，利用3x3矩阵，超过3为角点。全白的怎么办？
 @jit
 def conv_corner(image):
-    image=remove_same(image)
-
     Hi, Wi = image.shape
+    corner = np.zeros((int(Hi), int(Wi)))
     for i in range(Hi):
         for j in range(Wi):
             hTuples=(-1,0,1)
@@ -108,10 +107,10 @@ def conv_corner(image):
                         if image[i+m, j+n] >0:
                             count += 1
             if count >3:
-                image[i, j]=255
+                corner[i, j]=255
             else:
-                image[i, j] = 0
-    return image
+                corner[i, j] = 0
+    return corner
 
 
 #二值化。
@@ -154,5 +153,24 @@ def conv_corner(image):
 
 
 
-
+#突出角点，利用3x3矩阵，超过3为角点。
+@jit
+def conv_test(image):
+    Hi, Wi = image.shape
+    corner = np.zeros((int(Hi), int(Wi)))
+    for i in range(Hi):
+        for j in range(Wi):
+            hTuples=(-1,0,1)
+            vTuples = (-1, 0, 1)
+            isEdge=False;
+            for m in hTuples:
+                for n in vTuples:
+                    if i+m >=0 and i+m<Hi and j+n>=0 and j+n<Wi:
+                        if (m==1 and n==1) or (m==-1 and n==-1) or (m==1 and n==-1) or (m==-1 and n==1):
+                            isEdge = True
+            if isEdge ==True:
+                corner[i, j]=255
+            else:
+                corner[i, j] = 0
+    return corner
 

@@ -35,7 +35,7 @@ def conv_same(image, kernel):
                     for n in range(Wk):
                             temp += temp_paddinged[k+m][l+n] * kernel[m][n]
                             #print("位置",k,l,m,n,"相乘的数是：",temp_paddinged[k+m][l+n] , kernel[m][n],"结果:" ,temp_paddinged[k+m][l+n] * kernel[m][n]);
-                if image[k,l] >40:#这里会有问题，让浅的关键点一律消失了。todo
+                if image[k,l] >0:#这里会有问题，让浅的关键点一律消失了。todo
                     temp_m[k][l] = temp
                 #print("得到一个值",temp);
     return temp_m
@@ -69,9 +69,9 @@ def remove_same(image):
                 image[i, j] = 0
     return image
 
-#降低分辨率，池化
+#降低分辨率，池化(平均池化)
 @jit
-def pool(image):
+def pool_avarge(image):
     kernel = np.array([[1, 1], [1, 1]])
     Hi, Wi = image.shape
     Hk, Wk = kernel.shape
@@ -86,6 +86,26 @@ def pool(image):
                     if i*2 + m >= 0 and i*2 + m < Hi and j*2 + n >= 0 and j*2 + n < Wi:
                         count += image[i*2 + m, j*2 + n]
                         pooled[i,j] = count
+    return pooled
+
+
+@jit
+def pool(image):
+    kernel = np.array([[1, 1], [1, 1]])
+    Hi, Wi = image.shape
+    Hk, Wk = kernel.shape
+    pooled = np.zeros((int(Hi / 2),int(Wi / 2)))
+
+    Hp,Wp = pooled.shape
+    for i in range(Hp):
+        for j in range(Wp):
+            max = 0
+            for m in range(Hk):
+                for n in range(Wk):
+                    if i*2 + m >= 0 and i*2 + m < Hi and j*2 + n >= 0 and j*2 + n < Wi:
+                        if  image[i*2 + m, j*2 + n]>max:
+                            max =  image[i*2 + m, j*2 + n]
+                        pooled[i,j] = max
     return pooled
 
 

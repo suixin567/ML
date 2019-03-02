@@ -1,6 +1,7 @@
-/training_data
+/training_data/
 /.idea
 /__pycache__
 /training_data - ¸±±¾
+/logs/
 *.pyc
 *.jpg

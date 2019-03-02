@@ -4,15 +4,19 @@ posy =0
 
 
 def show(image,time,name):
-    Hi, Wi = image.shape
-    image = image.astype(np.uint8)  # 此句不可以省略。但会导致最大255的截取。
-    cv2.imshow(name, image)
-    cv2.moveWindow(name, 0, 0)
-    cv2.waitKey(time)
+    tempImage = image.copy()
+    temp = tempImage.max() / 255
+    tempImage = tempImage / temp
+
     global posy
-    posy += Hi
+    Hi, Wi = tempImage.shape
+    tempImage = tempImage.astype(np.uint8)  # 此句不可以省略。但会导致最大255的截取。
+    cv2.imshow(name, tempImage)
+    cv2.moveWindow(name, 0, posy)
+    cv2.waitKey(time)
+    posy += Hi+50
     if name!="":
-        cv2.imwrite("./logs/"+name+".jpg", image)
+        cv2.imwrite("./logs/"+name+".jpg", tempImage)
 
 
 

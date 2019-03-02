@@ -11,6 +11,8 @@ imgWidth=1000
 imgHeight=600
 kernelV = np.array([[1,0,-1],[1,0,-1],[1,0,-1]])
 kernelH = np.array([[1,1,1],[0,0,0],[-1,-1,-1]])
+# kernela = np.array([[1, 1, 1], [1, 0, 0], [1, 0, 0]])#左上角的直角检测器。
+kernela = np.array([[1, 1, 1], [0, 0, 1], [0, 0, 1]])  # 右上角的直角检测器。
 
 def parseFile():
     for _, dirs, _ in os.walk(train_path):
@@ -54,46 +56,42 @@ def train(objName,files):
         # cv2.imshow('featureH', featureH)
         # cv2.moveWindow("featureH", 0, 750)
         # cv2.waitKey(1)
-
-        #kernela = np.array([[1, 1, 1], [1, 0, 0], [1, 0, 0]])#左上角的直角检测器。
-        kernela = np.array([[1, 1, 1], [0, 0, 1], [0, 0, 1]])#右上角的直角检测器。
-
-        #第一次卷积
-        con_1 = tools.tool.conv_same(activateimg,kernela);
-        print("第一次卷积后的最大值",con_1.max())
-        #第一次池化
-        pool_1 =  tools.tool.pool(con_1);
-        print("第一次池化后的最大值", pool_1.max());
-        #第二次卷积
-        con_2 = tools.tool.conv_same(pool_1, kernela);
-        print("第二次卷积后的最大值", con_2.max());
-        #第二次池化
-        pool_2 = tools.tool.pool(con_2);
-        print("第二次池化后的最大值", pool_2.max())
-        # #第三次卷积
-        con_3 = tools.tool.conv_same(pool_2, kernela);
-        print("第三次卷积后的最大值", con_3.max())
-        #第三次池化
-        pool_3 = tools.tool.pool(con_3);
-        print("第三次池化后的最大值", pool_3.max())
-        # #第四次卷积
-        con_4 = tools.tool.conv_same(pool_3, kernela);
-        print("第四次卷积后的最大值", con_4.max())
-        #第四次池化
-        pool_4 = tools.tool.pool(con_4);
-        print("第四次池化后的最大值", pool_4.max())
-        #第五次卷积
-        con_5 = tools.tool.conv_same(pool_4, kernela);
-        print("第五次卷积后的最大值", con_5.max())
-        temp=con_5.max() /255
-        print(temp)
-        con_5 = con_5/temp
-        print(con_5.max())
-        tools.tool2.show(con_5,3000,"hello")
-
+        conv(activateimg,kernela);
 
         #进入海马体
         #hipp.collect(objName,featureV,featureH);
+
+
+def conv(imgae ,kernel):
+    # 第一次卷积
+    con_1 = tools.tool.conv_same(imgae, kernel);
+    print("第一次卷积后的最大值", con_1.max())
+    # 第一次池化
+    pool_1 = tools.tool.pool(con_1);
+    print("第一次池化后的最大值", pool_1.max());
+    # 第二次卷积
+    con_2 = tools.tool.conv_same(pool_1, kernel);
+    print("第二次卷积后的最大值", con_2.max());
+    # 第二次池化
+    pool_2 = tools.tool.pool(con_2);
+    print("第二次池化后的最大值", pool_2.max())
+    # #第三次卷积
+    con_3 = tools.tool.conv_same(pool_2, kernel);
+    print("第三次卷积后的最大值", con_3.max())
+    # 第三次池化
+    pool_3 = tools.tool.pool(con_3);
+    print("第三次池化后的最大值", pool_3.max())
+    # #第四次卷积
+    con_4 = tools.tool.conv_same(pool_3, kernel);
+    print("第四次卷积后的最大值", con_4.max())
+    tools.tool2.show(con_4, 3000, "con_4")
+    # 第四次池化
+    pool_4 = tools.tool.pool(con_4);
+    print("第四次池化后的最大值", pool_4.max())
+    # 第五次卷积
+    con_5 = tools.tool.conv_same(pool_4, kernel);
+    print("第五次卷积后的最大值", con_5.max())
+    tools.tool2.show(con_5, 3000, "conv_5")
 
 
 if __name__=="__main__":

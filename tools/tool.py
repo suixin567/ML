@@ -46,49 +46,6 @@ def conv_same(image, kernel):
     # return out
 
 
-#去除相同区域，只留下有差异的区域。
-@jit
-def remove_same(image):
-    Hi, Wi = image.shape
-    for i in range(Hi):
-        for j in range(Wi):
-            hTuples=(-1,0,1)
-            vTuples = (-1, 0, 1)
-            isSame=False;
-            self = image[i,j]
-            for m in hTuples:
-                for n in vTuples:
-                    if i+m >=0 and i+m<Hi and j+n>=0 and j+n<Wi:
-                        if image[i+m, j+n] == self:
-                            isSame =True;
-                        else:
-                            isSame= False
-
-
-            if isSame ==True:
-                image[i, j] = 0
-    return image
-
-#降低分辨率，池化(平均池化)
-@jit
-def pool_avarge(image):
-    kernel = np.array([[1, 1], [1, 1]])
-    Hi, Wi = image.shape
-    Hk, Wk = kernel.shape
-    pooled = np.zeros((int(Hi / 2),int(Wi / 2)))
-
-    Hp,Wp = pooled.shape
-    for i in range(Hp):
-        for j in range(Wp):
-            count = 0
-            for m in range(Hk):
-                for n in range(Wk):
-                    if i*2 + m >= 0 and i*2 + m < Hi and j*2 + n >= 0 and j*2 + n < Wi:
-                        count += image[i*2 + m, j*2 + n]
-                        pooled[i,j] = count
-    return pooled
-
-
 @jit
 def pool(image):
     kernel = np.array([[1, 1], [1, 1]])
@@ -111,26 +68,67 @@ def pool(image):
 
 
 
-#突出角点，利用3x3矩阵，超过3为角点。全白的怎么办？
+#突出反差点，利用3x3矩阵。
 @jit
 def conv_corner(image):
+
     Hi, Wi = image.shape
-    corner = np.zeros((int(Hi), int(Wi)))
+    corner = np.zeros((Hi, Wi))
     for i in range(Hi):
         for j in range(Wi):
             hTuples=(-1,0,1)
             vTuples = (-1, 0, 1)
-            count=0;
+            self=image[i,j];
+            total =0
             for m in hTuples:
                 for n in vTuples:
                     if i+m >=0 and i+m<Hi and j+n>=0 and j+n<Wi:
-                        if image[i+m, j+n] >0:
-                            count += 1
-            if count >3:
-                corner[i, j]=255
-            else:
-                corner[i, j] = 0
+                        offset = abs(self - image[i+m,j+n])
+                        total+= offset
+            corner[i, j]=total
     return corner
+
+# #去除相同区域，只留下有差异的区域。
+# @jit
+# def remove_same(image):
+#     Hi, Wi = image.shape
+#     for i in range(Hi):
+#         for j in range(Wi):
+#             hTuples=(-1,0,1)
+#             vTuples = (-1, 0, 1)
+#             isSame=False;
+#             self = image[i,j]
+#             for m in hTuples:
+#                 for n in vTuples:
+#                     if i+m >=0 and i+m<Hi and j+n>=0 and j+n<Wi:
+#                         if image[i+m, j+n] == self:
+#                             isSame =True;
+#                         else:
+#                             isSame= False
+#
+#
+#             if isSame ==True:
+#                 image[i, j] = 0
+#     return image
+
+#降低分辨率，池化(平均池化)
+# @jit
+# def pool_avarge(image):
+#     kernel = np.array([[1, 1], [1, 1]])
+#     Hi, Wi = image.shape
+#     Hk, Wk = kernel.shape
+#     pooled = np.zeros((int(Hi / 2),int(Wi / 2)))
+#
+#     Hp,Wp = pooled.shape
+#     for i in range(Hp):
+#         for j in range(Wp):
+#             count = 0
+#             for m in range(Hk):
+#                 for n in range(Wk):
+#                     if i*2 + m >= 0 and i*2 + m < Hi and j*2 + n >= 0 and j*2 + n < Wi:
+#                         count += image[i*2 + m, j*2 + n]
+#                         pooled[i,j] = count
+#     return pooled
 
 
 #二值化。
@@ -170,27 +168,3 @@ def conv_corner(image):
 #                     temp_m[k][l] = temp
 #                     #print("得到一个值",temp);
 #     return temp_m
-
-
-
-#突出角点，利用3x3矩阵，超过3为角点。
-@jit
-def conv_test(image):
-    Hi, Wi = image.shape
-    corner = np.zeros((int(Hi), int(Wi)))
-    for i in range(Hi):
-        for j in range(Wi):
-            hTuples=(-1,0,1)
-            vTuples = (-1, 0, 1)
-            isEdge=False;
-            for m in hTuples:
-                for n in vTuples:
-                    if i+m >=0 and i+m<Hi and j+n>=0 and j+n<Wi:
-                        if (m==1 and n==1) or (m==-1 and n==-1) or (m==1 and n==-1) or (m==-1 and n==1):
-                            isEdge = True
-            if isEdge ==True:
-                corner[i, j]=255
-            else:
-                corner[i, j] = 0
-    return corner
-

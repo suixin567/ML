@@ -99,7 +99,7 @@ def train(objName,files):
         # #第四次卷积
         con_4 = tools.tool.conv_same(pool_3, kernela);
        # con_4 = con_4 / 2;
-        con_4 = con_4/3
+        con_4 = con_4-0
         con_4 = np.where(con_4 > 20, con_4, 0)  # 大于20的才可以保留，否则变成0.todo这里有也有问题，会弱化浅的关键点，误伤。
         print("第四次卷积", con_4.max())
         con_4 = con_4.astype(np.uint8)  # 此句不可以省略。

@@ -114,21 +114,25 @@ def conv_corner(imgae):
     # #第三次卷积
     con_3 = tools.tool.conv_corner(pool_2);
     print("第三次卷积后的最大值", con_3.max())
-    tools.tool2.show(con_3, 3000, "con_3")
+    tools.tool2.show(con_3, 1000, "con_3")
     # 第三次池化
     pool_3 = tools.tool.pool(con_3);
     print("第三次池化后的最大值", pool_3.max())
     # #第四次卷积
     con_4 = tools.tool.conv_corner(pool_3);
     print("第四次卷积后的最大值", con_4.max())
-    tools.tool2.show(con_4, 3000, "con_4")
+    tools.tool2.show(con_4, 1000, "con_4")
     # 第四次池化
     pool_4 = tools.tool.pool(con_4);
     print("第四次池化后的最大值", pool_4.max())
     # 第五次卷积
     con_5 = tools.tool.conv_corner(pool_4);
     print("第五次卷积后的最大值", con_5.max())
-    tools.tool2.show(con_5, 3000, "conv_5")
+    tools.tool2.show(con_5, 2000, "conv_5")
+
+    # 计算分布分成360份，代表360度
+    tools.tool.distribution(con_5)
+
 
 
 if __name__=="__main__":

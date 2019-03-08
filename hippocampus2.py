@@ -23,13 +23,15 @@ class Hippocampus:
     shallowMemorys = []
 
     def __init__(self):
-        pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0)
+        pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0,decode_responses=True)# 解决获取的值类型是bytes字节问题
         self.r = redis.Redis(connection_pool=pool)
 
-        self.frame = self.r.get("frame")#获取唯一索引号
-        if self.frame == None:
+        temp = self.r.get("frame")
+        if temp == None:
             self.frame =0
-        print("海马初始化完成...",self.frame)
+        else:
+            self.frame = int(self.r.get("frame"))#获取唯一索引号 int类型
+        print("海马初始化完成...历史帧：",self.frame)
 
 
 
@@ -71,14 +73,34 @@ class Hippocampus:
         # 存储数据 （示例：88_vertical7 = 2）
         for k in range(len(engryArr)):
             self.r.set(str(self.frame) + "_vertical_" + str(k), engryArr[k])
+            print(str(self.frame),"帧时 key是",str(self.frame) + "_vertical_" + str(k),"数据是",engryArr[k],)
 
 
 
     def collect_ok(self, objName):
+
+        old = int(self.frame)-1000#检索之前的10000条数据
+        if old<0:
+            old=0
+
+        # 进行辨别 (当前帧和之前的所有帧进行对比)
+        for i in range(int(self.frame) -1 ,old,-1):#遍历历史记忆(不包含此次记忆，所以-1)
+            score = 0
+            for j in range(10):
+                #print("比较的是：",str(i) + "_vertical_" + str(j),str(self.frame) + "_vertical_" + str(j))
+                #print("比较结果是：",self.r.get(str(i) + "_vertical_" + str(j)),"    ",self.r.get(str(self.frame) + "_vertical_" + str(j)))
+                if self.r.get(str(i) + "_vertical_" + str(j)) == self.r.get(str(self.frame) + "_vertical_" + str(j)):
+                    score = score +10#增加10分
+            print("记忆序号", i,"vertical" ,"得分" ,score);
+
+
+
+
+
         # 记录当前帧物品
         self.r.set(str(self.frame) + "_obj", objName)
         # 帧数+1
-        self.r.set("frame", int(self.frame) + 1)
+        self.r.set("frame", self.frame + 1)
 
 
 

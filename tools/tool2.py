@@ -1,8 +1,10 @@
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
+
 posy =0
 
-
+#显示一张二维矩阵
 def show(image,time,name):
     tempImage = image.copy()
     temp = tempImage.max() / 255
@@ -18,7 +20,16 @@ def show(image,time,name):
     if name!="":
         cv2.imwrite("./logs/"+name+".jpg", tempImage)
 
-
+#显示折线图
+def show2(arr):
+    x1 = range(0, len(arr))
+    plt.plot(x1, arr, label='Frist line', linewidth=1, color='r', marker='o', markerfacecolor='blue', markersize=2)
+    # plt.plot(x2,y2,label='second line')
+    plt.xlabel('角度')
+    plt.ylabel('角度数量')
+    plt.title('角度分布')
+    plt.legend()
+    plt.show()
 
 
 

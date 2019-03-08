@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 import numpy as np
 from numba import jit
-import matplotlib.pyplot as plt
+
 
 #same卷积
 @jit
@@ -89,41 +89,6 @@ def conv_corner(image):
                         total+= offset
             corner[i, j]=total
     return corner
-
-
-
-
-#计算角度的分布。
-@jit
-def distribution(image):
-    interval = image.max()/360
-
-    angleArr = np.zeros(360)
-    Hi, Wi = image.shape
-    for i in range(Hi):
-        for j in range(Wi):
-            if image[i,j]>0:#只统计有值的地方
-                angleIndex = int(image[i,j]//interval)
-                if angleIndex!=0:
-                    print(angleIndex)
-                temp = angleArr[angleIndex]
-                if temp<500:
-                    temp= temp+1
-
-                angleArr[angleIndex] = temp
-    # print(angleArr);
-    # print(angleArr.max())
-
-
-    x1 = range(0, 360)
-    plt.plot(x1, angleArr, label='Frist line', linewidth=1, color='r', marker='o', markerfacecolor='blue', markersize=2)
-    # plt.plot(x2,y2,label='second line')
-    plt.xlabel('角度')
-    plt.ylabel('角度数量')
-    plt.title('角度分布')
-    plt.legend()
-    plt.show()
-
 
 
 # #去除相同区域，只留下有差异的区域。

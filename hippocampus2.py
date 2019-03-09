@@ -70,6 +70,26 @@ class Hippocampus:
                     temp = temp + 1
                     engryArr[angleIndex] = temp
         print("垂直能量分布", engryArr);
+
+        old = int(self.frame) - 10000  # 检索之前的10000条数据
+        if old < 0:
+            old = 0
+
+        # 进行辨别 (当前帧和之前的所有帧进行对比)
+        for m in range(int(self.frame) - 1, old, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)
+            score = 0
+            for n in range(10):
+                print("比较的是：",str(m) + "_vertical_" + str(n))
+                print("比较结果是：",self.r.get(str(m) + "_vertical_" + str(n)),"    ",engryArr[n])
+                if self.r.get(str(m) + "_vertical_" + str(n)) == str(engryArr[n]):
+                    score = score + 10  # 增加10分
+            if score==100:
+                print("历史激活器被激活，历史序号", m, "vertical", "得分", score);
+                #上报此过滤器。
+                self.collect_features(engryArr)
+                return#如果找到历史中此过滤器的雷同值，则停止继续查找。
+
+
         # 存储数据 （示例：88_vertical7 = 2）
         for k in range(len(engryArr)):
             self.r.set(str(self.frame) + "_vertical_" + str(k), engryArr[k])
@@ -77,30 +97,14 @@ class Hippocampus:
 
 
 
-    def collect_ok(self, objName):
-
-        old = int(self.frame)-1000#检索之前的10000条数据
-        if old<0:
-            old=0
-
-        # 进行辨别 (当前帧和之前的所有帧进行对比)
-        for i in range(int(self.frame) -1 ,old,-1):#遍历历史记忆(不包含此次记忆，所以-1)
-            score = 0
-            for j in range(10):
-                #print("比较的是：",str(i) + "_vertical_" + str(j),str(self.frame) + "_vertical_" + str(j))
-                #print("比较结果是：",self.r.get(str(i) + "_vertical_" + str(j)),"    ",self.r.get(str(self.frame) + "_vertical_" + str(j)))
-                if self.r.get(str(i) + "_vertical_" + str(j)) == self.r.get(str(self.frame) + "_vertical_" + str(j)):
-                    score = score +10#增加10分
-            print("记忆序号", i,"vertical" ,"得分" ,score);
 
 
+    #收集激活的过滤器
+    def collect_features(self,feature):
+        print("收到一个激活器",feature)
+        features = []
+        features.append(feature)
 
-
-
-        # 记录当前帧物品
-        self.r.set(str(self.frame) + "_obj", objName)
-        # 帧数+1
-        self.r.set("frame", self.frame + 1)
 
 
 
@@ -119,6 +123,13 @@ class Hippocampus:
             print("----------------------------->>>",objName, featureV, featureH);
             newMemery = ShallowMemory(objName,featureV,featureH);
             self.shallowMemorys.append(newMemery);
+
+
+    def collect_ok(self, objName):
+        # 记录当前帧物品
+        self.r.set(str(self.frame) + "_obj", objName)
+        # 帧数+1
+        self.r.set("frame", self.frame + 1)
 
 
     def save(self):

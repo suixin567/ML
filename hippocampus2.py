@@ -1,6 +1,4 @@
 # -*- coding: UTF-8 -*-
-import sqlite3
-import redis
 import numpy as np
 
 class ShallowMemory:
@@ -22,88 +20,19 @@ class Hippocampus:
     ladder = 1000;#超参数 能量梯子
     shallowMemorys = []
 
-    def __init__(self):
-        pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0,decode_responses=True)# 解决获取的值类型是bytes字节问题
-        self.r = redis.Redis(connection_pool=pool)
+    # def __init__(self):
 
-        temp = self.r.get("frame")
-        if temp == None:
-            self.frame =0
-        else:
-            self.frame = int(self.r.get("frame"))#获取唯一索引号 int类型
-        print("海马初始化完成...历史帧：",self.frame)
-
-
-
-    def collect_corner(self, image):
-        Hi, Wi = image.shape
-        interval = image.max() / 10  # 能量分为10个档次
-        # print("interval" ,interval)
-        engryArr = np.zeros(10)
-        for i in range(Hi):
-            for j in range(Wi):
-                if image[i, j] > 0:  # 只统计有值的地方
-                    angleIndex = int(image[i, j] // interval) - 1  # 判断此能量属于哪个档次。
-                    if angleIndex < 0:  # 索引不可以为负数
-                        angleIndex = 0
-                    temp = engryArr[angleIndex]
-                    temp = temp + 1
-                    engryArr[angleIndex] = temp
-        print("角点能量分布", engryArr);
-        #存储数据 （示例：88_corner7 = 2）
-        for k in  range(len(engryArr)) :
-            self.r.set(str(self.frame) +"_corner_" + str(k), engryArr[k])
-
-
-    def collect_vertical(self, image):
-        Hi, Wi = image.shape
-        interval = image.max() / 10  # 能量分为10个档次
-        # print("interval" ,interval)
-        engryArr = np.zeros(10)
-        for i in range(Hi):
-            for j in range(Wi):
-                if image[i, j] > 0:  # 只统计有值的地方
-                    angleIndex = int(image[i, j] // interval) - 1  # 判断此能量属于哪个档次。
-                    if angleIndex < 0:  # 索引不可以为负数
-                        angleIndex = 0
-                    temp = engryArr[angleIndex]
-                    temp = temp + 1
-                    engryArr[angleIndex] = temp
-        print("垂直能量分布", engryArr);
-
-        old = int(self.frame) - 10000  # 检索之前的10000条数据
-        if old < 0:
-            old = 0
-
-        # 进行辨别 (当前帧和之前的所有帧进行对比)
-        for m in range(int(self.frame) - 1, old, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)
-            score = 0
-            for n in range(10):
-                print("比较的是：",str(m) + "_vertical_" + str(n))
-                print("比较结果是：",self.r.get(str(m) + "_vertical_" + str(n)),"    ",engryArr[n])
-                if self.r.get(str(m) + "_vertical_" + str(n)) == str(engryArr[n]):
-                    score = score + 10  # 增加10分
-            if score==100:
-                print("历史激活器被激活，历史序号", m, "vertical", "得分", score);
-                #上报此过滤器。
-                self.collect_features(engryArr)
-                return#如果找到历史中此过滤器的雷同值，则停止继续查找。
-
-
-        # 存储数据 （示例：88_vertical7 = 2）
-        for k in range(len(engryArr)):
-            self.r.set(str(self.frame) + "_vertical_" + str(k), engryArr[k])
-            print(str(self.frame),"帧时 key是",str(self.frame) + "_vertical_" + str(k),"数据是",engryArr[k],)
-
-
-
-
-
+    features = []#当前帧激活的过滤器
     #收集激活的过滤器
-    def collect_features(self,feature):
-        print("收到一个激活器",feature)
-        features = []
-        features.append(feature)
+    def collect_features(self,featureName):
+        print("收到一个激活过滤器", featureName)
+        #保存这个激活的过滤器
+        # for i in feature:
+        #     self.r.rpush("shallow_" + str(self.frame), i)
+        # print("打印浅记忆" , r.lrange('aa', 0, r.llen('aa')));
+        #
+        #
+        # features.append(featureName)
 
 
 
@@ -125,11 +54,10 @@ class Hippocampus:
             self.shallowMemorys.append(newMemery);
 
 
-    def collect_ok(self, objName):
-        # 记录当前帧物品
-        self.r.set(str(self.frame) + "_obj", objName)
-        # 帧数+1
-        self.r.set("frame", self.frame + 1)
+    # def collect_ok(self, objName):
+    #     # 记录当前帧物品
+    #     self.r.set(str(self.frame) + "_obj", objName)
+
 
 
     def save(self):

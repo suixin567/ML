@@ -20,9 +20,8 @@ def begin(activateimg):
     verticalResult = conv(activateimg, kernelV2)
     collect_vertical(verticalResult)
 
-    # 收集完成
-    #hipp2.collect_ok()
-
+    # 上报完成
+    hipp2.collect_features_ok()
     #增加帧数
     g.updateFrame()
 

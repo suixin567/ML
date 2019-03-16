@@ -16,17 +16,18 @@ class Hippocampus:
 
     # 收集激活的过滤器完成，统一处理
     def collect_features_ok(self):
-        print("海马开始进行判断...",self.features)
+        print("海马开始进行判断...")
         # 判断为旧记忆还是新记忆
         #遍历所有之前的记忆
         for m in range(int(g.frame) - 1, -1, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)
-            #print("之前的记忆", str(m) + '_shallow')  #之前的记忆  33_shallow  32_shallow  31_shallow
+            # print("之前的记忆", str(m) + '_shallow')  #之前的记忆  33_shallow  32_shallow  31_shallow
             featureList = g.r.lrange(str(m) + '_shallow', 0, g.r.llen(str(m) + '_shallow'))#获取记忆的具体内容 ['15_corner_', '13_vertical_']
             #print("记忆具体内容",featureList,"本次海马得到的内容",self.features)
             if featureList == self.features:
+                # print(len(self.features),featureList)
                 print("发现此历史记忆匹配",str(m) + '_shallow')
 
-                self.brain.receive("脑 你好")
+                self.brain.receive(str(m) + '_shallow')
                 # 对比具体挡位是否一致
                 # score = 0
                 # for n in range(len(featureList)):#n代表激活器的序号

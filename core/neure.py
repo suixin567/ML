@@ -9,10 +9,14 @@ class Neure:
     def __init__(self,id,row):
         self.id = id
         self.activate = False
+        self.isEnd =False
+        if row == 9:
+            self.isEnd =True
         # print("元",id,row)
 
     def receive(self,feature):
         self.activate =True
+
 
         #先获取自己已经有的特征，有的话就别重复的添加了
         myFeatureList = g.r.lrange('neure'+str(self.id), 0, g.r.llen('neure'+str(self.id)))
@@ -23,6 +27,9 @@ class Neure:
                 newIntensity = int(intensity)+1  # 获取唯一索引号 int类型
                 g.r.set("neure" + str(self.id) + "_" + feature,newIntensity)
                 print("我是元",self.id,"收到熟悉的特征：",feature,"最新强度值",newIntensity)
+                # 传递到皮层
+                if self.isEnd:
+                    self.pallium.receive(feature)
                 return
         # 最新收集到的特征强度为1
         print("我是元",self.id,"收到最新的特征：",feature)
@@ -30,7 +37,8 @@ class Neure:
         g.r.set("neure" + str(self.id) + "_" + feature, 1)
 
         #传递到皮层
-        # self.pallium.receive(_from)
+        if self.isEnd:
+            self.pallium.receive(feature)
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_

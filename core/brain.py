@@ -23,14 +23,17 @@ class Brain:
         #传给第一排元
         self.transmitMethod(featureList,0)
 
-        #传递接下来每一排的元
-        for i in range(1,10):
-            print("准备传递至第", i, "层")
+        #让这一排的元向前传递(从第0到第9排)
+        for i in range(0,9):
+            print("让第",i,"排的元向前传递")
             for j in range(10):
                 neure=self.neures[i][j]
                 #获取这个元的特征列表
-                nuure_features = g.r.keys(pattern='neure' + str(neure.id) + '*')
-                self.transmitMethod(nuure_features,i)
+                neureFeatureList = g.r.lrange('neure' + str(neure.id), 0, g.r.llen('neure' + str(neure.id)))
+
+                if len(neureFeatureList)==0 or neure.activate==False:
+                    continue
+                self.transmitMethod(neureFeatureList,i+1)
 
     #单个元的传递规则 根据特征List向下传递一层
     def  transmitMethod(self,featureList,stepIndex):
@@ -48,8 +51,8 @@ class Brain:
                     familiar_neure = self.neures[stepIndex][j]
             if familiar_max ==-1:
                 #print("没有熟悉的元")
-                self.neures[stepIndex][random.randint(0, 9)].receive(f,intensity=10)
+                self.neures[stepIndex][random.randint(0, 9)].receive(f)
             else:
                 #print("找到了最熟悉的元")
-                familiar_neure.receive(f,intensity=10)
+                familiar_neure.receive(f)
 

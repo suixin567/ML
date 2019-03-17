@@ -3,7 +3,7 @@ class PalliumNeure:
     def __init__(self,id):
         self.id = id
         self.activate = False
-        print("皮层元",id)
+        #print("皮层元",id)
 
     def receive(self,_from):
         print("皮层元 接收",_from)

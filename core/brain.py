@@ -4,10 +4,9 @@ import random
 
 class Brain:
     def __init__(self):
+        print("脑初始化...")
         index =-1
-
         self.neures = [[0 for i in range(10)] for j in range(10)]
-
         for i in range(10):
             for j in range(10):
                 index= index+1

@@ -6,6 +6,7 @@ from core.brain import *
 class Hippocampus:
 
     def __init__(self):
+        print("海马初始化...")
         self.features = []  # 当前帧激活的过滤器
         self.brain = Brain()
 

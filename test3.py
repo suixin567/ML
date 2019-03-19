@@ -9,6 +9,8 @@
 #
 # print(r.lrange('tt',0,r.llen('tt')));
 
-import random
+# import random
+#
+# print(random.randint(0, 9))
 
-print(random.randint(0, 9))
+print(max(1,2,2))

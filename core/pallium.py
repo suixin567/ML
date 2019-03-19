@@ -46,6 +46,8 @@ class Pallium:
         self.palliumNeures=[]
         self.features = []  # 当前帧皮层收到的特征列表
 
+        self.action=['left','right','forward']
+
         for i in range(10):
                 palliumNeure = PalliumNeure(i)
                 self.palliumNeures.append(palliumNeure)
@@ -60,7 +62,28 @@ class Pallium:
         #把特征分配给每个皮层元
         self.transmitMethod(self.features)
         #特征都分配给皮层元之后现在该做出判断了
-        print("现在该做出判断了");
+        print("现在该做出判断了",self.features);
+        leftScore = 0
+        rightScore = 0
+        forwardScore = 0
+        for i in self.palliumNeures:
+            if i.activate:
+                print("我是激活的",i.id)
+                if i.id<3:
+                    leftScore = leftScore+1
+                elif i.id>6:
+                    rightScore =rightScore+1
+                else:
+                    forwardScore = forwardScore+1
+        #得出结论
+        if leftScore>rightScore and leftScore>forwardScore:
+            print("action:left!")
+        if rightScore > leftScore and rightScore > forwardScore:
+            print("action:right!")
+        if forwardScore > leftScore and forwardScore > rightScore:
+            print("action:forward!")
+
+
 
    #单个元的传递规则 根据特征List向下传递一层
     def  transmitMethod(self,featureList):

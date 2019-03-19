@@ -1,5 +1,7 @@
 import random
 import g
+from core.feedback import Feedback
+
 
 #皮层元
 class PalliumNeure:
@@ -7,6 +9,7 @@ class PalliumNeure:
         self.id = id
         self.activate = False
         #print("皮层元",id)
+
 
     def receive(self,feature):
         self.activate =True
@@ -51,7 +54,10 @@ class Pallium:
         for i in range(10):
                 palliumNeure = PalliumNeure(i)
                 self.palliumNeures.append(palliumNeure)
+        #初始化反馈区
+        self.feedback = Feedback()
 
+        
     def receive(self,feature):
         print("皮层收到一个特征...",feature)
         self.features.append(feature)
@@ -77,11 +83,23 @@ class Pallium:
                     forwardScore = forwardScore+1
         #得出结论
         if leftScore>rightScore and leftScore>forwardScore:
-            print("action:left!")
+            self.feedback.send("action:left!")
+            return
         if rightScore > leftScore and rightScore > forwardScore:
-            print("action:right!")
+            self.feedback.send("action:right!")
+            return
         if forwardScore > leftScore and forwardScore > rightScore:
-            print("action:forward!")
+            self.feedback.send("action:forward!")
+            return
+        print("没有明确动作，那么就做一个随机动作吧")
+        self.feedback.send("action:forward!")
+
+
+    #收到环境的反馈
+    def env_feedback(self,feedback):
+        print("收到环境的反馈")
+        if feedback==False:
+            print("收到一个不好的反馈，接下来对自身做出调整！")
 
 
 

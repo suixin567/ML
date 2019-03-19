@@ -3,8 +3,6 @@ import g
 import random
 
 class Neure:
-    # 初始化皮层
-    pallium = Pallium()
 
     def __init__(self,id,row):
         self.id = id
@@ -29,7 +27,7 @@ class Neure:
                 print("我是元",self.id,"收到熟悉的特征：",feature,"最新强度值",newIntensity)
                 # 传递到皮层
                 if self.isEnd:
-                    self.pallium.receive(feature)
+                    g.pallium.receive(feature)
                 return
         # 最新收集到的特征强度为1
         print("我是元",self.id,"收到最新的特征：",feature)
@@ -38,7 +36,7 @@ class Neure:
 
         #传递到皮层
         if self.isEnd:
-            self.pallium.receive(feature)
+            g.pallium.receive(feature)
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_

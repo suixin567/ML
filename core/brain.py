@@ -33,6 +33,9 @@ class Brain:
                 if len(neureFeatureList)==0 or neure.activate==False:
                     continue
                 self.transmitMethod(neureFeatureList,i+1)
+        #通知皮层当前帧的特征全部传完了
+        g.pallium.receive_ok()
+
 
     #单个元的传递规则 根据特征List向下传递一层
     def  transmitMethod(self,featureList,stepIndex):
@@ -54,4 +57,3 @@ class Brain:
             else:
                 #print("找到了最熟悉的元")
                 familiar_neure.receive(f)
-

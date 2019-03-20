@@ -15,10 +15,10 @@ class Brain:
                 self.neures[i][j]=neu
         # print(self.neures)
 
-    def receive(self,pointer):
+    def receive(self,features):
         print("脑开始运行...")#此list的具体内容： ['15_corner_', '13_vertical_']
 
-        featureList = g.r.lrange(pointer, 0,g.r.llen(pointer))  # 获取记忆的具体内容 ['15_corner_', '13_vertical_']
+        featureList = g.r.lrange(features, 0,g.r.llen(features))  # 获取记忆的具体内容 ['15_corner_', '13_vertical_']
         #传给第一排元
         self.transmitMethod(featureList,0)
 
@@ -27,8 +27,10 @@ class Brain:
             print("让第",i,"排的元向前传递")
             for j in range(10):
                 neure=self.neures[i][j]
-                #获取这个元的特征列表
-                neureFeatureList = g.r.lrange('neure' + str(neure.id), 0, g.r.llen('neure' + str(neure.id)))
+                #获取这个元的特征列表（只获取当前帧的最新特征！！！）
+                neureFeatureList = g.r.lrange('neure' + str(neure.id), g.r.llen('neure' + str(neure.id)) - neure.newFeatureAmount , g.r.llen('neure' + str(neure.id)))
+                #获取一个元的最新特征后，重置最新特征数！
+                neure.newFeatureAmount = 0
 
                 if len(neureFeatureList)==0 or neure.activate==False:
                     continue

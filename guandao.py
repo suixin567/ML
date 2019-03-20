@@ -81,7 +81,7 @@ def collect_corner(image):
         old = 0
 
     # 进行辨别 (当前帧和之前的所有帧进行对比)
-    for m in range(int(g.frame) - 1, old, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)
+    for m in range(int(g.frame) - 1, old, -1):  # 遍历历史记忆(不包含此次记忆，所以-1) # 遍历历史记忆(不包含此次记忆，所以-1)  但这样的话，会导致第0帧的记忆不会被运行到。因为只有 range(3-1,0,-1)时才会运行。也就是说在第二帧时会检查第一帧，第一帧时不会去检查第0帧。
         score = 0
         for n in range(10):
             #print("比较的是：", str(m) + "_corner_" + str(n))
@@ -154,7 +154,7 @@ def collect_vertical(image):
         old = 0
 
     # 进行辨别 (当前帧和之前的所有帧进行对比)
-    for m in range(int(g.frame) - 1, old, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)
+    for m in range(int(g.frame) - 1, old, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)  但这样的话，会导致第0帧的记忆不会被运行到。因为只有 range(3-1,0,-1)时才会运行。也就是说在第二帧时会检查第一帧，第一帧时不会去检查第0帧。
         score = 0
         for n in range(10):
             # print("比较的是：",str(m) + "_vertical_" + str(n))
@@ -170,4 +170,4 @@ def collect_vertical(image):
     # 存储数据 （示例：88_vertical7 = 2）
     for k in range(len(engryArr)):
         g.r.set(str(g.frame) + "_vertical_" + str(k), engryArr[k])
-        print(str(g.frame), "帧时 key是", str(g.frame) + "_vertical_" + str(k), "数据是", engryArr[k],)
+        print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_vertical_" + str(k), "数据是", engryArr[k],)

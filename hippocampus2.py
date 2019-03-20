@@ -44,7 +44,7 @@ class Hippocampus:
         for f in self.features:
             g.r.rpush(str(g.frame)+'_shallow', f)
         #打印这些过滤器的组合
-        print("发现一个新东西：", g.r.lrange(str(g.frame)+'_shallow', 0, g.r.llen(str(g.frame)+'_shallow')));
+        print("海马发现一个新东西的组合：", g.r.lrange(str(g.frame)+'_shallow', 0, g.r.llen(str(g.frame)+'_shallow')));
 
         #重置
         self.features = []

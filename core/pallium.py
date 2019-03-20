@@ -15,19 +15,27 @@ class PalliumNeure:
         self.activate =True
 
         #先获取自己已经有的特征，有的话就别重复的添加了
-        myFeatureList = g.r.lrange('palliumneure'+str(self.id), 0, g.r.llen('palliumneure'+str(self.id)))
-        for f in myFeatureList:
-            if f == feature:#此特征已经存在
-                #先获取这个特征的intensity
-                intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
-                newIntensity = int(intensity)+1  # 获取唯一索引号 int类型
-                g.r.set("palliumneure" + str(self.id) + "_" + feature,newIntensity)
-                print("我是皮层元",self.id,"收到熟悉的特征：",feature,"最新强度值",newIntensity)
-                return
-        # 最新收集到的特征强度为1
-        print("我是皮层元",self.id,"收到最新的特征：",feature)
-        g.r.rpush('palliumneure'+str(self.id), feature)
-        g.r.set("palliumneure" + str(self.id) + "_" + feature, 1)
+        # myFeatureList = g.r.lrange('palliumneure'+str(self.id), 0, g.r.llen('palliumneure'+str(self.id)))
+        # for f in myFeatureList:
+        #     if f == feature:#此特征已经存在
+        #         #先获取这个特征的intensity
+        #         intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
+        #         newIntensity = int(intensity)+1  # 获取唯一索引号 int类型
+        #         g.r.set("palliumneure" + str(self.id) + "_" + feature,newIntensity)
+        #         print("我是皮层元",self.id,"收到熟悉的特征：",feature,"最新强度值",newIntensity)
+        #         return
+
+        print("我是皮层元", self.id, "收到最新的特征：", feature)
+        g.r.rpush('palliumneure' + str(self.id), feature)
+
+        # 先获取这个特征的intensity
+        newIntensity = 0
+        intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
+        if intensity == None:
+            newIntensity = 1
+        else:
+            newIntensity = int(intensity) + 1  # 获取唯一索引号 int类型
+        g.r.set("palliumneure" + str(self.id) + "_" + feature, newIntensity)
 
 
     #判断对某个特征的熟悉程度
@@ -57,7 +65,7 @@ class Pallium:
         #初始化反馈区
         self.feedback = Feedback()
 
-        
+
     def receive(self,feature):
         print("皮层收到一个特征...",feature)
         self.features.append(feature)

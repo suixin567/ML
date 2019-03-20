@@ -1,14 +1,11 @@
 # -*- coding: UTF-8 -*-
 import g
 
-from core.brain import *
-
 class Hippocampus:
 
     def __init__(self):
         print("海马初始化...")
         self.features = []  # 当前帧激活的过滤器
-        self.brain = Brain()
 
     #收集激活的过滤器
     def collect_features(self,featureName):
@@ -30,7 +27,7 @@ class Hippocampus:
                 # print(len(self.features),featureList)
                 print("发现此历史记忆匹配",str(m) + '_shallow')
 
-                self.brain.receive(str(m) + '_shallow')
+                g.brain.receive(str(m) + '_shallow')
                 # 对比具体挡位是否一致
                 # score = 0
                 # for n in range(len(featureList)):#n代表激活器的序号

@@ -59,6 +59,10 @@ class Neure:
         else:
             return int(result)
 
+    def update(self):
+
+        print("元进行反馈更新");
+
 
 
 

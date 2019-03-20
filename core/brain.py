@@ -59,3 +59,12 @@ class Brain:
             else:
                 #print("找到了最熟悉的元")
                 familiar_neure.receive(f)
+
+
+    def update(self):
+        print("脑进行反馈...")
+        for i in range(0, 9):
+            for j in range(10):
+                neure = self.neures[i][j]
+                #让每个元进行反馈更新
+                neure.update()

@@ -1,7 +1,7 @@
 import random
 import g
 from core.feedback import Feedback
-
+import numpy as np
 
 #皮层元
 class PalliumNeure:
@@ -13,21 +13,8 @@ class PalliumNeure:
 
     def receive(self,feature):
         self.activate =True
-
-        #先获取自己已经有的特征，有的话就别重复的添加了
-        # myFeatureList = g.r.lrange('palliumneure'+str(self.id), 0, g.r.llen('palliumneure'+str(self.id)))
-        # for f in myFeatureList:
-        #     if f == feature:#此特征已经存在
-        #         #先获取这个特征的intensity
-        #         intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
-        #         newIntensity = int(intensity)+1  # 获取唯一索引号 int类型
-        #         g.r.set("palliumneure" + str(self.id) + "_" + feature,newIntensity)
-        #         print("我是皮层元",self.id,"收到熟悉的特征：",feature,"最新强度值",newIntensity)
-        #         return
-
         print("我是皮层元", self.id, "收到最新的特征：", feature)
         g.r.rpush('palliumneure' + str(self.id), feature)
-
         # 先获取这个特征的intensity
         newIntensity = 0
         intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
@@ -100,7 +87,7 @@ class Pallium:
             self.feedback.send("action:forward!")
             return
         print("没有明确动作，那么就做一个随机动作吧")
-        self.feedback.send("action:forward!")
+        self.feedback.send(np.random.choice(self.action))
 
 
     #收到环境的反馈
@@ -108,7 +95,8 @@ class Pallium:
         print("收到环境的反馈")
         if feedback==False:
             print("收到一个不好的反馈，接下来对自身做出调整！")
-
+            #进行一步反馈更新
+            g.brain.update()
 
 
    #单个元的传递规则 根据特征List向下传递一层

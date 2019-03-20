@@ -1,6 +1,6 @@
 import redis
 from core.pallium import Pallium
-
+from core.brain import Brain
 # 全局数据库
 pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0, decode_responses=True)  # 解决获取的值类型是bytes字节问题
 r = redis.Redis(connection_pool=pool)
@@ -18,6 +18,7 @@ print("初始化redis...历史帧：", frame)
 def updateFrame():
     r.set("frame",frame+1)
 
-
+#全局brain
+brain = Brain()
 #全局皮层
 pallium = Pallium()

@@ -28,7 +28,7 @@ class Neure:
     def familiar(self,feature): #feature的样子： 13_vertical_
         #判断一下自己是否接收这个特征首先便利自己的特征列表
         features = g.r.hkeys("neure"+str(self.id))  # 获取所有keys的列表
-        print("我是元",self.id,"特征列表是",features)
+        # print("我是元",self.id,"特征列表是",features)
         for i in range(len(features)-1, -1, -1):#倒序遍历
             if feature == features[i]:#如果存在这个特征
                 value = g.r.hget("neure" + str(self.id), features[i])

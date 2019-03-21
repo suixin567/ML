@@ -42,7 +42,7 @@ class PalliumNeure:
 
         # 判断一下自己是否接收这个特征首先便利自己的特征列表
         features = g.r.hkeys("palliumneure" + str(self.id))  # 获取所有keys的列表
-        print("我是皮层元", self.id, "特征列表是", features)
+        # print("我是皮层元", self.id, "特征列表是", features)
         for i in range(len(features) - 1, -1, -1):  # 倒序遍历
             if feature == features[i]:  # 如果存在这个特征
                 value = g.r.hget("palliumneure" + str(self.id), features[i])
@@ -130,8 +130,6 @@ class Pallium:
         print("没有明确动作，那么就做一个随机动作吧")
         self.feedback.send(np.random.choice(self.action))
 
-        #增加帧数
-        g.updateFrame()
 
     #收到环境的反馈
     def env_feedback(self,feedback):

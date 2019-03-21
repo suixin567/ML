@@ -22,11 +22,10 @@ class Hippocampus:
         for m in range(int(g.frame) - 1, -1, -1):  # 遍历历史记忆(不包含此次记忆，所以-1)
             # print("之前的记忆", str(m) + '_shallow')  #之前的记忆  33_shallow  32_shallow  31_shallow
             featureList = g.r.lrange(str(m) + '_shallow', 0, g.r.llen(str(m) + '_shallow'))#获取记忆的具体内容 ['15_corner_', '13_vertical_']
-            #print("记忆具体内容",featureList,"本次海马得到的内容",self.features)
+            print("海马遍历记忆组合具体内容",str(m) + '_shallow',featureList,"本次海马得到的内容",self.features)
             if featureList == self.features:
                 # print(len(self.features),featureList)
                 print("发现此历史记忆匹配",str(m) + '_shallow')
-
                 g.brain.receive(str(m) + '_shallow')
                 # 对比具体挡位是否一致
                 # score = 0
@@ -43,7 +42,8 @@ class Hippocampus:
         for f in self.features:
             g.r.rpush(str(g.frame)+'_shallow', f)
         #打印这些过滤器的组合
-        print("海马发现一个新东西的组合：", g.r.lrange(str(g.frame)+'_shallow', 0, g.r.llen(str(g.frame)+'_shallow')));
+        print("海马发现一个新东西的组合：",str(g.frame)+'_shallow', g.r.lrange(str(g.frame)+'_shallow', 0, g.r.llen(str(g.frame)+'_shallow')));
 
         #重置
         self.features = []
+        print("海马重置",self.features)

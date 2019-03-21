@@ -25,16 +25,16 @@ r = redis.Redis(connection_pool=pool)
 #     print("序号：%s   值：%s" % (i, val))
 
 
-# r.hset('neure12', 'name', 'Jack')
-# r.hset('neure12', 'age', 20)
-# r.hset('neure12', 'phone', '18712909999')
-# r.hset('neure12', 'email', '123@gmail.com')
-# rst = r.hgetall('neure12')
-# print(rst)
-# print(type(rst))
-# print(r.hget('neure12','phone'))
-#
-# print(r.hkeys("neure12"))#获取所有keys的列表
+r.hset('neure12', 'name', 'Jack')
+r.hset('neure12', 'age', 20)
+r.hset('neure12', 'phone', '18712909999')
+r.hset('neure12', 'email', '123@gmail.com')
+rst = r.hgetall('neure12')
+print(rst)
+print(type(rst))
+print(r.hget('neure12','phone'))
+
+print(r.hkeys("neure12"))#获取所有keys的列表
 
 # chance = 0.25
 # temp = random.random()
@@ -52,5 +52,6 @@ r = redis.Redis(connection_pool=pool)
 #             print("ff")
 #     print("运行",i)
 
-arr = ['a','b','c','d','e','f']
-print(arr[len(arr)-2:len(arr)])
+# arr = ['a','b','c','d','e','f']
+# print(arr[len(arr)-2:len(arr)])
+print(0.5**2.0)

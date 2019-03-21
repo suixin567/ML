@@ -61,7 +61,7 @@ class Brain:
 
     def update(self):
         print("脑进行反馈...")
-        for i in range(0, 9):
+        for i in range(10):
             for j in range(10):
                 neure = self.neures[i][j]
                 #让每个元进行反馈更新

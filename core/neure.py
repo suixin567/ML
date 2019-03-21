@@ -41,34 +41,25 @@ class Neure:
         return False
 
 
-
+    #元的反馈更新todo: 这里存在问题：同一个元在同一帧内接受了多个特征的话，对每个特征的惩罚是递减的，但同一帧下应统一削弱。
     def update(self):
-        print("元进行反馈更新");
-        return
-        reduce=1#衰减多少
         rate =0.5#衰减率
-        featureAmount = g.r.llen('neure' + str(self.id))
-        print("特征个数",featureAmount)
-        myFeatureList = g.r.lrange('neure'+str(self.id), 0, featureAmount)
-        print("特征列表", myFeatureList)
+        features = g.r.hkeys("neure" + str(self.id))  # 获取所有keys的列表
+        if len(features) == 0:
+            return
+        print("元进行反馈更新：我是元", self.id, "特征列表是", features)
+        count = 0
+        for i in range(len(features) - 1, -1, -1):  # 倒序遍历
+            value = g.r.hget("neure" + str(self.id), features[i])
+            newValue = float(value)-float(value)*(rate**count)
+            print("更新后,元",self.id,"的特征",features[i],"的最新值是",newValue)
+            g.r.hset("neure" + str(self.id), features[i], newValue)
+            if newValue<=0:#移出这个特征
+                g.r.hdel("neure" + str(self.id),features[i])
+                ttvalue = g.r.hget("neure" + str(self.id), features[i])
+                print("已经删除了应该是None",ttvalue)
 
-        # for i, f in enumerate(myFeatureList):
-        #     reduce = rate**i
-        #     #先获取这个特征的intensity
-        #     intensity = g.r.get("neure" + str(self.id) + "_" + f)
-        #     print("我是元",self.id,"特征是",f,"强度是",intensity)
-        #     newIntensity = int(intensity) - int(intensity)*reduce
-        #     print("新强度是",newIntensity)
-        #     g.r.set("neure" + str(self.id) + "_" + f,newIntensity)
-
-        count=0
-        #倒序循环
-        for m in range(featureAmount-1, -1, -1):#m是从大到小的顺序
-            count=count+1
-
-
-            print(m,myFeatureList[m])
-
+            count = count + 1
 
 
 

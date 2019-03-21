@@ -56,6 +56,28 @@ class PalliumNeure:
 
 
 
+    #元的反馈更新todo: 这里存在问题：同一个元在同一帧内接受了多个特征的话，对每个特征的惩罚是递减的，但同一帧下应统一削弱。
+    def update(self):
+        rate =0.5#衰减率
+        features = g.r.hkeys("palliumneure" + str(self.id))  # 获取所有keys的列表
+        if len(features) == 0:
+            return
+        print("皮层元进行反馈更新：我是皮层元", self.id, "特征列表是", features)
+        count = 0
+        for i in range(len(features) - 1, -1, -1):  # 倒序遍历
+            value = g.r.hget("palliumneure" + str(self.id), features[i])
+            newValue = float(value)-float(value)*(rate**count)
+            print("更新后,皮层元",self.id,"的特征",features[i],"的最新值是",newValue)
+            g.r.hset("palliumneure" + str(self.id), features[i], newValue)
+            if newValue<=0:#移出这个特征
+                g.r.hdel("palliumneure" + str(self.id),features[i])
+                ttvalue = g.r.hget("palliumneure" + str(self.id), features[i])
+                print("已经删除了应该是None",ttvalue)
+
+            count = count + 1
+
+
+
 class Pallium:
     def __init__(self):
         print("皮层初始化...")
@@ -118,6 +140,7 @@ class Pallium:
             print("收到一个不好的反馈，接下来对自身做出调整！")
             #进行一步反馈更新
             g.brain.update()
+            g.pallium.update()
 
 
    #单个元的传递规则 根据特征List向下传递一层
@@ -137,3 +160,12 @@ class Pallium:
             if isAccept == False:
                 #print("没有熟悉的元")
                 self.palliumNeures[random.randint(0, 9)].receive(f)
+
+
+    #对皮层元的更新
+    def update(self):
+        print("皮层进行反馈...")
+        for i in range(10):
+            neure = self.palliumNeures[i]
+            #让每个皮层元进行反馈更新
+            neure.update()

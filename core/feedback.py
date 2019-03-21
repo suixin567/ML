@@ -11,7 +11,7 @@ class Feedback:
     def send(self,action):
         print("发送了一个命令",action)
         #发送后等待环境反馈
-        time.sleep(2)
+        time.sleep(1)
         self.receive()
 
     def receive(self):

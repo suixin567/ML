@@ -20,7 +20,7 @@ class Brain:
 
         featureList = g.r.lrange(features, 0,g.r.llen(features))  # 获取记忆的具体内容 ['15_corner_', '13_vertical_']
         #传给第一排元
-        self.transmitMethod(featureList,0)
+        self.transmitMethod(featureList,0)#0代表传给第0排
 
         #让这一排的元向前传递(从第0到第9排)
         for i in range(0,9):
@@ -28,7 +28,8 @@ class Brain:
             for j in range(10):
                 neure=self.neures[i][j]
                 #获取这个元的特征列表（只获取当前帧的最新特征！！！）
-                neureFeatureList = g.r.lrange('neure' + str(neure.id), g.r.llen('neure' + str(neure.id)) - neure.newFeatureAmount , g.r.llen('neure' + str(neure.id)))
+                allFeatureList = g.r.hkeys("neure"+str(neure.id))
+                neureFeatureList = allFeatureList[len(allFeatureList)-neure.newFeatureAmount:len(allFeatureList)]
                 #获取一个元的最新特征后，重置最新特征数！
                 neure.newFeatureAmount = 0
 
@@ -41,24 +42,21 @@ class Brain:
 
     #单个元的传递规则 根据特征List向下传递一层
     def  transmitMethod(self,featureList,stepIndex):
-
         for f in featureList:
             #向下传递（对每一个特征都要找到最应该传递的目标元）
-            familiar_neure =None#最想传给的元
-            familiar_max = -1#记录哪个元最熟悉这个特征
             #遍历下一排元
+            isAccept = False#此特征是否被接收
             for j in range(10):
                 # print(self.neures[i][j].id)
-                familiar_intensity = self.neures[stepIndex][j].familiar(f)#获得熟悉程度
-                if familiar_intensity > familiar_max:
-                    familiar_max = familiar_intensity
-                    familiar_neure = self.neures[stepIndex][j]
-            if familiar_max ==-1:
-                #print("没有熟悉的元")
+                isAccept = self.neures[stepIndex][j].familiar(f)#判断这个元是否接收此特征
+                if isAccept == True:
+                    # print("找到了最熟悉的元")
+                    self.neures[stepIndex][j].receive(f)
+                    break
+            if isAccept == False:
+                print("没有熟悉的元")
                 self.neures[stepIndex][random.randint(0, 9)].receive(f)
-            else:
-                #print("找到了最熟悉的元")
-                familiar_neure.receive(f)
+
 
 
     def update(self):

@@ -12,28 +12,47 @@ class PalliumNeure:
 
 
     def receive(self,feature):
-        self.activate =True
+        # self.activate =True
+        # print("我是皮层元", self.id, "收到最新的特征：", feature)
+        # g.r.rpush('palliumneure' + str(self.id), feature)
+        # # 先获取这个特征的intensity
+        # newIntensity = 0
+        # intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
+        # if intensity == None:
+        #     newIntensity = 1
+        # else:
+        #     newIntensity = int(intensity) + 1  # 获取唯一索引号 int类型
+        # g.r.set("palliumneure" + str(self.id) + "_" + feature, newIntensity)
+        self.activate = True
+
+        # 最新收集到的特征强度为1
         print("我是皮层元", self.id, "收到最新的特征：", feature)
-        g.r.rpush('palliumneure' + str(self.id), feature)
-        # 先获取这个特征的intensity
-        newIntensity = 0
-        intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
-        if intensity == None:
-            newIntensity = 1
-        else:
-            newIntensity = int(intensity) + 1  # 获取唯一索引号 int类型
-        g.r.set("palliumneure" + str(self.id) + "_" + feature, newIntensity)
+        g.r.hset('palliumneure' + str(self.id), feature, 1)
 
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_
-        # print("特征的样子",feature)
-        #元查看自己的记忆。具体格式为： neure78_13_vertical
-        result = g.r.get("palliumneure"+str(self.id)+"_"+feature)
-        if result == None:
-            return -1
-        else:
-            return int(result)
+        # # print("特征的样子",feature)
+        # #元查看自己的记忆。具体格式为： neure78_13_vertical
+        # result = g.r.get("palliumneure"+str(self.id)+"_"+feature)
+        # if result == None:
+        #     return -1
+        # else:
+        #     return int(result)
+
+        # 判断一下自己是否接收这个特征首先便利自己的特征列表
+        features = g.r.hkeys("palliumneure" + str(self.id))  # 获取所有keys的列表
+        print("我是皮层元", self.id, "特征列表是", features)
+        for i in range(len(features) - 1, -1, -1):  # 倒序遍历
+            if feature == features[i]:  # 如果存在这个特征
+                value = g.r.hget("palliumneure" + str(self.id), features[i])
+                print(value)
+                rand = random.random()
+                print("临时", rand)
+                if rand <= float(value):  # 落在了机会范围内则被选中
+                    print("我是皮层元", self.id, "对特征", features[i], "的几率是", value, "随机值是", rand, "交给我吧！")
+                    return True
+        return False
 
 
 
@@ -89,6 +108,8 @@ class Pallium:
         print("没有明确动作，那么就做一个随机动作吧")
         self.feedback.send(np.random.choice(self.action))
 
+        #增加帧数
+        g.updateFrame()
 
     #收到环境的反馈
     def env_feedback(self,feedback):
@@ -104,18 +125,15 @@ class Pallium:
         print("准备分配给皮层元")
         for f in featureList:
             #向下传递（对每一个特征都要找到最应该传递的目标元）
-            familiar_neure =None#最想传给的元
-            familiar_max = -1#记录哪个元最熟悉这个特征
             #遍历下一排元
+            isAccept = False  # 此特征是否被接收
             for j in range(10):
                 # print(self.neures[i][j].id)
-                familiar_intensity = self.palliumNeures[j].familiar(f)#获得熟悉程度
-                if familiar_intensity > familiar_max:
-                    familiar_max = familiar_intensity
-                    familiar_neure = self.palliumNeures[j]
-            if familiar_max ==-1:
+                isAccept = self.palliumNeures[j].familiar(f)#获得熟悉程度
+                if isAccept == True:
+                    # print("找到了最熟悉的元")
+                    self.palliumNeures[j].receive(f)
+                    break
+            if isAccept == False:
                 #print("没有熟悉的元")
                 self.palliumNeures[random.randint(0, 9)].receive(f)
-            else:
-                #print("找到了最熟悉的元")
-                familiar_neure.receive(f)

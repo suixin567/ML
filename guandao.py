@@ -22,8 +22,7 @@ def begin(activateimg):
 
     # 上报完成
     hipp2.collect_features_ok()
-    #增加帧数
-    g.updateFrame()
+
 
 
 

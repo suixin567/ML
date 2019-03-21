@@ -91,6 +91,8 @@ def conv_corner(image):
     return corner
 
 
+
+
 # #去除相同区域，只留下有差异的区域。
 # @jit
 # def remove_same(image):

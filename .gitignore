@@ -5,3 +5,14 @@
 /logs/
 *.pyc
 *.jpg
+
+
+
+
+/ML_unity/[Oo]bj/
+/ML_unity/[Ll]ibrary/
+/ML_unity/Assets/imgs/
+*.vs
+*.meta
+*.csproj
+*.sln

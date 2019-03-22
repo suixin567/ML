@@ -1,6 +1,8 @@
 import redis
 from core.pallium import Pallium
 from core.brain import Brain
+import tools.client
+
 # 全局数据库
 pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0, decode_responses=True)  # 解决获取的值类型是bytes字节问题
 r = redis.Redis(connection_pool=pool)
@@ -22,3 +24,6 @@ def updateFrame():
 brain = Brain()
 #全局皮层
 pallium = Pallium()
+
+#初始化套接字
+client = tools.client.Client()

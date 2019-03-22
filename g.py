@@ -1,6 +1,7 @@
 import redis
 from core.pallium import Pallium
 from core.brain import Brain
+from core.feedback import Feedback
 import tools.client
 
 # 全局数据库
@@ -22,8 +23,12 @@ def updateFrame():
 
 #全局brain
 brain = Brain()
+
 #全局皮层
 pallium = Pallium()
+
+# 初始化反馈区
+feedback = Feedback()
 
 #初始化套接字
 client = tools.client.Client()

@@ -90,8 +90,7 @@ class Pallium:
         for i in range(10):
                 palliumNeure = PalliumNeure(i)
                 self.palliumNeures.append(palliumNeure)
-        #初始化反馈区
-        self.feedback = Feedback()
+
 
 
     def receive(self,feature):
@@ -119,26 +118,26 @@ class Pallium:
                     forwardScore = forwardScore+1
         #得出结论
         if leftScore>rightScore and leftScore>forwardScore:
-            self.feedback.send("action:left!")
-            return
-        if rightScore > leftScore and rightScore > forwardScore:
-            self.feedback.send("action:right!")
-            return
-        if forwardScore > leftScore and forwardScore > rightScore:
-            self.feedback.send("action:forward!")
-            return
-        print("没有明确动作，那么就做一个随机动作吧")
-        self.feedback.send(np.random.choice(self.action))
+            g.client.send("left")
+        elif rightScore > leftScore and rightScore > forwardScore:
+            g.client.send("right")
+        elif forwardScore > leftScore and forwardScore > rightScore:
+            g.client.send("forward")
+        else:
+            print("没有明确动作，那么就做一个随机动作吧")
+            g.client.send(np.random.choice(self.action))
 
 
-    #收到环境的反馈
-    def env_feedback(self,feedback):
-        print("收到环境的反馈")
-        if feedback==False:
+        #查看当前的反馈情况
+        if g.feedback.state == "collision":
+            g.feedback.state == "update"#改变状态
             print("收到一个不好的反馈，接下来对自身做出调整！")
-            #进行一步反馈更新
+            # 进行一步反馈更新
             g.brain.update()
             g.pallium.update()
+        else:
+            print("当前没有发生碰撞！")
+
 
 
    #单个元的传递规则 根据特征List向下传递一层

@@ -139,7 +139,6 @@ class Pallium:
             #进行一步反馈更新
             g.brain.update()
             g.pallium.update()
-            g.client.close()
 
 
    #单个元的传递规则 根据特征List向下传递一层

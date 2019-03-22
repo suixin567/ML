@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
 import socket
+from threading import Thread
+
 
 class SocketModel(object):
         def __init__(self):
@@ -19,6 +21,11 @@ class Client(object):
                 self.s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
                 self.s.connect((HOST, PORT))       #要连接的IP与端口
                 self.send()
+                #开启一个线程进行监听消息
+                self.th = Thread(target=self.listen, args=(99,))
+                self.th.start()
+
+        def listen(self,arg):
                 while self.run:
                         data = self.s.recv(1024)
                         self.receive(data)
@@ -30,6 +37,8 @@ class Client(object):
                 model = SocketModel()
                 model.__dict__.update(dict)
                 print(model.Message)
+                if model.Message == "exit":
+                        self.run = False
 
 
 
@@ -37,11 +46,5 @@ class Client(object):
                 model = SocketModel()
                 message = json.dumps(model.__dict__)
                 self.s.sendall(message.encode())  # 把命令发送给对端
-
-        def close(self):
-                self.run = False  # 关闭连接
-                self.s.close()
-
-
 
 

@@ -44,7 +44,6 @@ public class Driver : MonoBehaviour {
 
 
 
-
     public void forward() {
         transform.Translate(Vector3.forward * 10*Time.deltaTime);
     }

@@ -3,6 +3,8 @@ import tools.tool
 import tools.tool2
 import hippocampus2
 import g
+from numba import jit
+
 
 kernelV = np.array([[0,1,0],[0,1,0],[0,1,0]])
 kernelH = np.array([[0,0,0],[1,1,1],[0,0,0]])
@@ -75,7 +77,7 @@ def conv_corner(imgae):
     #tools.tool2.show(con_5, 200, "conv_5")
     return con_5
 
-
+@jit
 def collect_corner(image):
     Hi, Wi = image.shape
     interval = image.max() / 10  # 能量分为10个档次
@@ -130,7 +132,7 @@ def conv(imgae, kernel):
     # #第三次卷积
     con_3 = tools.tool.conv_same(pool_2, kernel);
     #print("第三次卷积后的最大值", con_3.max())
-    tools.tool2.show(con_3, 100, "con_3")
+    # tools.tool2.show(con_3, 100, "con_3")
     # 第三次池化
     pool_3 = tools.tool.pool(con_3);
     #print("第三次池化后的最大值", pool_3.max())
@@ -147,7 +149,7 @@ def conv(imgae, kernel):
     #tools.tool2.show(con_5, 100, "conv_5")
     return con_5
 
-
+@jit
 def collect_vertical(image):
     Hi, Wi = image.shape
     interval = image.max() / 10  # 能量分为10个档次
@@ -190,7 +192,7 @@ def collect_vertical(image):
 
 
 
-
+@jit
 def collect_horizontal(image):
     Hi, Wi = image.shape
     interval = image.max() / 10  # 能量分为10个档次
@@ -234,7 +236,7 @@ def collect_horizontal(image):
 
 
 
-
+@jit
 def collect_left(image):
     Hi, Wi = image.shape
     interval = image.max() / 10  # 能量分为10个档次
@@ -275,7 +277,7 @@ def collect_left(image):
         #print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_left_" + str(k), "数据是", engryArr[k],)
 
 
-
+@jit
 def collect_Right(image):
     Hi, Wi = image.shape
     interval = image.max() / 10  # 能量分为10个档次

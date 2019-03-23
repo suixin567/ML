@@ -32,10 +32,17 @@ class Client(object):
 
 
         def receive(self,data):
-                model = data.decode()
-                dict = json.loads(model)
-                model = SocketModel()
-                model.__dict__.update(dict)
+                try:
+                        model = data.decode()
+                        dict = json.loads(model)
+                        model = SocketModel()
+                        model.__dict__.update(dict)
+                except:#出问题就是连续发送碰撞引起的。
+                        g.feedback.state = "collision"
+                        print("发生了碰撞")
+                        time.sleep(2)
+                        return
+
                 print(model.Message)
                 if model.Message == "exit":
                         self.run = False

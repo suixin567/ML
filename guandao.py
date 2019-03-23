@@ -45,34 +45,34 @@ def begin(activateimg):
 def conv_corner(imgae):
     # 第一次卷积
     con_1 = tools.tool.conv_corner(imgae);
-    print("第一次卷积后的最大值", con_1.max())
+    #print("第一次卷积后的最大值", con_1.max())
     # 第一次池化
     pool_1 = tools.tool.pool(con_1);
-    print("第一次池化后的最大值", pool_1.max());
+    #print("第一次池化后的最大值", pool_1.max());
     # 第二次卷积
     con_2 = tools.tool.conv_corner(pool_1);
-    print("第二次卷积后的最大值", con_2.max());
+    #print("第二次卷积后的最大值", con_2.max());
     # 第二次池化
     pool_2 = tools.tool.pool(con_2);
-    print("第二次池化后的最大值", pool_2.max())
+    #print("第二次池化后的最大值", pool_2.max())
     # #第三次卷积
     con_3 = tools.tool.conv_corner(pool_2);
-    print("第三次卷积后的最大值", con_3.max())
-    tools.tool2.show(con_3, 100, "con_3")
+    #print("第三次卷积后的最大值", con_3.max())
+    #tools.tool2.show(con_3, 100, "con_3")
     # 第三次池化
     pool_3 = tools.tool.pool(con_3);
-    print("第三次池化后的最大值", pool_3.max())
+    #print("第三次池化后的最大值", pool_3.max())
     # #第四次卷积
     con_4 = tools.tool.conv_corner(pool_3);
-    print("第四次卷积后的最大值", con_4.max())
-    tools.tool2.show(con_4, 100, "con_4")
+    #print("第四次卷积后的最大值", con_4.max())
+    #tools.tool2.show(con_4, 100, "con_4")
     # 第四次池化
     pool_4 = tools.tool.pool(con_4);
-    print("第四次池化后的最大值", pool_4.max())
+    #print("第四次池化后的最大值", pool_4.max())
     # 第五次卷积
     con_5 = tools.tool.conv_corner(pool_4);
-    print("第五次卷积后的最大值", con_5.max())
-    tools.tool2.show(con_5, 200, "conv_5")
+    #print("第五次卷积后的最大值", con_5.max())
+    #tools.tool2.show(con_5, 200, "conv_5")
     return con_5
 
 
@@ -117,34 +117,34 @@ def collect_corner(image):
 def conv(imgae, kernel):
     # 第一次卷积
     con_1 = tools.tool.conv_same(imgae, kernel);
-    print("第一次卷积后的最大值", con_1.max())
+    #print("第一次卷积后的最大值", con_1.max())
     # 第一次池化
     pool_1 = tools.tool.pool(con_1);
-    print("第一次池化后的最大值", pool_1.max());
+    #print("第一次池化后的最大值", pool_1.max());
     # 第二次卷积
     con_2 = tools.tool.conv_same(pool_1, kernel);
-    print("第二次卷积后的最大值", con_2.max());
+    #print("第二次卷积后的最大值", con_2.max());
     # 第二次池化
     pool_2 = tools.tool.pool(con_2);
-    print("第二次池化后的最大值", pool_2.max())
+    #print("第二次池化后的最大值", pool_2.max())
     # #第三次卷积
     con_3 = tools.tool.conv_same(pool_2, kernel);
-    print("第三次卷积后的最大值", con_3.max())
+    #print("第三次卷积后的最大值", con_3.max())
     tools.tool2.show(con_3, 100, "con_3")
     # 第三次池化
     pool_3 = tools.tool.pool(con_3);
-    print("第三次池化后的最大值", pool_3.max())
+    #print("第三次池化后的最大值", pool_3.max())
     # #第四次卷积
     con_4 = tools.tool.conv_same(pool_3, kernel);
-    print("第四次卷积后的最大值", con_4.max())
-    tools.tool2.show(con_4, 100, "con_4")
+    #print("第四次卷积后的最大值", con_4.max())
+    #tools.tool2.show(con_4, 100, "con_4")
     # 第四次池化
     pool_4 = tools.tool.pool(con_4);
-    print("第四次池化后的最大值", pool_4.max())
+    #print("第四次池化后的最大值", pool_4.max())
     # 第五次卷积
     con_5 = tools.tool.conv_same(pool_4, kernel);
-    print("第五次卷积后的最大值", con_5.max())
-    tools.tool2.show(con_5, 100, "conv_5")
+    #print("第五次卷积后的最大值", con_5.max())
+    #tools.tool2.show(con_5, 100, "conv_5")
     return con_5
 
 

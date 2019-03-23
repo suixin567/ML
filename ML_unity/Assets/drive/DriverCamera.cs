@@ -2,22 +2,26 @@
 using System.Collections;
 
 public class DriverCamera : MonoBehaviour {
-
+	public static DriverCamera instance; 
+	Camera mCam;
+	int  width = 1000;
+	int height =600;
 	// Use this for initialization
 	void Start () {
-	
+		instance = this;
+		mCam = Camera.main;
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if (Input.GetKeyDown(KeyCode.Z)) {
-            MakeCameraImg(Camera.main,1000,600);
-        }
+            MakeCameraImg();
+		}
 	}
 
 
     //把摄像头视野 打印出png图片
-    private void MakeCameraImg(Camera mCam, int width, int height)
+	public void MakeCameraImg()
     {
         RenderTexture rt = new RenderTexture(width, height, 3);
         mCam.pixelRect = new Rect(0, 0, Screen.width, Screen.height);
@@ -31,8 +35,9 @@ public class DriverCamera : MonoBehaviour {
         RenderTexture.active = null;
         UnityEngine.Object.Destroy(rt);
         byte[] bytes = screenShot.EncodeToPNG();
-        string filename = Application.dataPath + "/imgs/"
-                          + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
+		string filename =Application.dataPath;
+		filename = filename.Substring (0,filename.LastIndexOf("/"))	+ "/training_data/0.jpg";
+           //               + System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".png";
         System.IO.File.WriteAllBytes(filename, bytes);
 
     }

@@ -55,19 +55,24 @@ public class MessageManager : MonoBehaviour
         if (model == null) {
             return;
         }
-        //Debug.LogWarning("收到了" + model.Message);
+        Debug.LogWarning("收到了" + model.Message);
         switch (model.Message)
         {
-            case UnityProtocol.FORWARD:
+		case UnityProtocol.FORWARD:
+			
                 Driver.driver.forward();
                 break;
             case UnityProtocol.LEFT:
+
                 Driver.driver.left();
                 break;
             case UnityProtocol.RIGHT:
+
                 Driver.driver.right();
                 break;
-
+		case UnityProtocol.CAMERA:
+			DriverCamera.instance.MakeCameraImg ();
+			break;
 
             default:
                 Debug.LogError("未知协议...");

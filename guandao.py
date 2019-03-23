@@ -39,8 +39,7 @@ def begin(activateimg):
     hipp2.collect_features_ok()
 
 
-    # 增加帧数
-    g.updateFrame()
+
 
 
 def conv_corner(imgae):
@@ -186,7 +185,7 @@ def collect_vertical(image):
     # 存储数据 （示例：88_vertical7 = 2）
     for k in range(len(engryArr)):
         g.r.set(str(g.frame) + "_vertical_" + str(k), engryArr[k])
-        print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_vertical_" + str(k), "数据是", engryArr[k],)
+        #print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_vertical_" + str(k), "数据是", engryArr[k],)
 
 
 
@@ -229,7 +228,7 @@ def collect_horizontal(image):
     # 存储数据 （示例：88_vertical7 = 2）
     for k in range(len(engryArr)):
         g.r.set(str(g.frame) + "_horizontal_" + str(k), engryArr[k])
-        print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_horizontal_" + str(k), "数据是", engryArr[k],)
+        #print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_horizontal_" + str(k), "数据是", engryArr[k],)
 
 
 
@@ -273,7 +272,7 @@ def collect_left(image):
     # 存储数据 （示例：88_vertical7 = 2）
     for k in range(len(engryArr)):
         g.r.set(str(g.frame) + "_left_" + str(k), engryArr[k])
-        print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_left_" + str(k), "数据是", engryArr[k],)
+        #print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_left_" + str(k), "数据是", engryArr[k],)
 
 
 
@@ -314,4 +313,4 @@ def collect_Right(image):
     # 存储数据 （示例：88_vertical7 = 2）
     for k in range(len(engryArr)):
         g.r.set(str(g.frame) + "_right_" + str(k), engryArr[k])
-        print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_right_" + str(k), "数据是", engryArr[k],)
+        #print(str(g.frame), "帧时，管道保存了一个新的记忆， key是", str(g.frame) + "_right_" + str(k), "数据是", engryArr[k],)

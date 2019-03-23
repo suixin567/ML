@@ -45,7 +45,7 @@ public class Driver : MonoBehaviour {
 
 
     public void forward() {
-        transform.Translate(Vector3.forward * 10*Time.deltaTime);
+        transform.Translate(Vector3.forward * 20*Time.deltaTime);
     }
 
     public void left() {
@@ -62,7 +62,8 @@ public class Driver : MonoBehaviour {
     {
         if (collision.gameObject.name.StartsWith("wall"))
         {
-            Debug.Log("碰撞" + collision.gameObject.name);
+			Debug.LogWarning("碰撞" + collision.gameObject.name);
+			send("collision");
         }
         
     }

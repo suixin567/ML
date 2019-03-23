@@ -1,6 +1,6 @@
 import random
 import g
-from core.feedback import Feedback
+import time
 import numpy as np
 
 #皮层元
@@ -137,6 +137,16 @@ class Pallium:
             g.pallium.update()
         else:
             print("当前没有发生碰撞！")
+        time.sleep(2)
+
+        #重置特征列表
+        self.features = []
+        print("重置皮层",self.features)
+        # 增加帧数
+        print("增加帧数...")
+        g.updateFrame()
+        # 通知unity截图
+        g.client.send("camera")
 
 
 

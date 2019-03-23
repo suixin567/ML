@@ -55,7 +55,7 @@ public class MessageManager : MonoBehaviour
         if (model == null) {
             return;
         }
-        Debug.LogWarning("收到了" + model.Message);
+		Debug.Log("收到了" + model.Message);
         switch (model.Message)
         {
 		case UnityProtocol.FORWARD:
@@ -72,6 +72,7 @@ public class MessageManager : MonoBehaviour
                 break;
 		case UnityProtocol.CAMERA:
 			DriverCamera.instance.MakeCameraImg ();
+			ServerForUnity.server.SendMessage(1,2,3, "cameraok");
 			break;
 
             default:

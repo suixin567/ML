@@ -3,6 +3,7 @@ import json
 import socket
 from threading import Thread
 import g
+import time
 
 class SocketModel(object):
         def __init__(self):
@@ -41,6 +42,11 @@ class Client(object):
                 #发生了碰撞
                 if model.Message == "collision":
                         g.feedback.state = "collision"
+                        print("发生了碰撞")
+                        time.sleep(2)
+                #unity截图完成
+                if model.Message == "cameraok":
+                        g.retina.loadImg()
 
 
 

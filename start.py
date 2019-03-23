@@ -7,10 +7,7 @@ import guandao
 train_path='training_data'
 imgWidth=1000
 imgHeight=600
-# kernelV = np.array([[1,0,-1],[1,0,-1],[1,0,-1]])
-# kernelH = np.array([[1,1,1],[0,0,0],[-1,-1,-1]])
-# kernela = np.array([[1, 1, 1], [1, 0, 0], [1, 0, 0]])#左上角的直角检测器。
-# kernela = np.array([[1, 1, 1], [0, 0, 1], [0, 0, 1]])  # 右上角的直角检测器。
+
 
 def parseFile():
     for _, dirs, _ in os.walk(train_path):
@@ -34,24 +31,6 @@ def start(objName,files):
         print("resize尺寸", rimg.shape);
         activateimg = rimg - lastimg
         lastimg = rimg
-        # activateimg = activateimg.astype(np.uint8)#此句不可以省略。
-        # cv2.imshow('activate', activateimg)
-        # cv2.moveWindow("activate", 0, 0)
-        # cv2.waitKey(1)
-
-        # #获取v特征
-        # featureV = tools.tool.conv_same(activateimg,kernelV)
-        # featureV = np.clip(featureV,0,255)
-        # cv2.imshow('featureV', featureV)
-        # cv2.moveWindow("featureV", 0, 350)
-        # cv2.waitKey(1)
-        #
-        # #获取h特征
-        # featureH = tools.tool.conv_same(activateimg, kernelH)
-        # featureH = np.clip(featureH, 0, 255)
-        # cv2.imshow('featureH', featureH)
-        # cv2.moveWindow("featureH", 0, 750)
-        # cv2.waitKey(1)
 
         # 送入管道
         guandao.begin(activateimg)

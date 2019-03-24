@@ -38,3 +38,9 @@ client = tools.client.Client()
 
 #初始化视网膜
 retina = Retina()
+
+
+#当前问题 ：
+#1、bad反馈需要在下一帧中才能体现
+#2、管道用时太长
+#3、反馈的效果不好，依旧会走错的路。

@@ -50,16 +50,19 @@ public class Driver : MonoBehaviour {
     public void forward() {
         transform.Translate(Vector3.forward * 20*Time.deltaTime);
 		lastAction = "forward";
+		Debug.Log ("forward");
     }
 
     public void left() {
         transform.Rotate(Vector3.up, -15);
 		lastAction = "left";
-    }
+		Debug.Log ("left");
+	}
 
     public void right() {
         transform.Rotate(Vector3.up, 15);
 		lastAction = "right";
+		Debug.Log ("right");
     }
 
 

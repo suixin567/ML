@@ -131,7 +131,8 @@ class Pallium:
             g.client.send(np.random.choice(self.action))
 
         #做出动作后等一下反馈
-        time.sleep(1)
+        print("等待反馈中...")
+        time.sleep(2)
         #查看当前的反馈情况
         if g.feedback.state == "collision":
             g.feedback.state = "update"#改变状态

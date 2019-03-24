@@ -32,16 +32,12 @@ class Client(object):
 
 
         def receive(self,data):
-                try:
-                        model = data.decode()
-                        dict = json.loads(model)
-                        model = SocketModel()
-                        model.__dict__.update(dict)
-                except:#出问题就是连续发送碰撞引起的。
-                        g.feedback.state = "collision"
-                        # print("发生了碰撞...")
-                        # time.sleep(2)
-                        return
+
+                model = data.decode()
+                dict = json.loads(model)
+                model = SocketModel()
+                model.__dict__.update(dict)
+
 
                 # print(model.Message)
                 if model.Message == "exit":
@@ -49,7 +45,7 @@ class Client(object):
                 #发生了碰撞
                 if model.Message == "collision":
                         g.feedback.state = "collision"
-                        # print("发生了碰撞")
+                        print("收到消息：发生了碰撞")
                         # time.sleep(2)
                 #unity截图完成
                 if model.Message == "cameraok":

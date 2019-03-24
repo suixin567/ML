@@ -55,7 +55,7 @@ public class MessageManager : MonoBehaviour
         if (model == null) {
             return;
         }
-		Debug.Log("收到了" + model.Message);
+		//Debug.Log("收到了" + model.Message);
         switch (model.Message)
         {
 		case UnityProtocol.FORWARD:

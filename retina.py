@@ -15,7 +15,7 @@ class Retina:
 
     def loadImg(self):
         image = cv2.imread(os.path.join(train_path, "0.jpg"))
-        print("原图尺寸", image.shape);
+        # print("原图尺寸", image.shape);
         rimg = cv2.split(image)[0]
         rimg = cv2.resize(rimg, (imgWidth, imgHeight), 0, 0, cv2.INTER_LINEAR)
         # 送入管道

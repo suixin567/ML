@@ -43,7 +43,7 @@ class Client(object):
                         # time.sleep(2)
                         return
 
-                print(model.Message)
+                # print(model.Message)
                 if model.Message == "exit":
                         self.run = False
                 #发生了碰撞

@@ -24,7 +24,7 @@ class Brain:
 
         #让这一排的元向前传递(从第0到第9排)
         for i in range(0,9):
-            print("让第",i,"排的元向前传递")
+            # print("让第",i,"排的元向前传递")
             for j in range(10):
                 neure=self.neures[i][j]
                 #获取这个元的特征列表（只获取当前帧的最新特征！！！）
@@ -54,13 +54,13 @@ class Brain:
                     self.neures[stepIndex][j].receive(f)
                     break
             if isAccept == False:
-                print("没有熟悉的元")
+                # print("没有熟悉的元")
                 self.neures[stepIndex][random.randint(0, 9)].receive(f)
 
 
 
     def update(self):
-        print("脑进行反馈...")
+        # print("脑进行反馈...")
         for i in range(10):
             for j in range(10):
                 neure = self.neures[i][j]

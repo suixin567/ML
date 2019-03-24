@@ -26,7 +26,7 @@ class PalliumNeure:
         self.activate = True
 
         # 最新收集到的特征强度为1
-        print("我是皮层元", self.id, "收到最新的特征：", feature)
+        # print("我是皮层元", self.id, "收到最新的特征：", feature)
         g.r.hset('palliumneure' + str(self.id), feature, 1)
 
 
@@ -46,11 +46,11 @@ class PalliumNeure:
         for i in range(len(features) - 1, -1, -1):  # 倒序遍历
             if feature == features[i]:  # 如果存在这个特征
                 value = g.r.hget("palliumneure" + str(self.id), features[i])
-                print(value)
+                # print(value)
                 rand = random.random()
-                print("临时", rand)
+                # print("临时", rand)
                 if rand <= float(value):  # 落在了机会范围内则被选中
-                    print("我是皮层元", self.id, "对特征", features[i], "的几率是", value, "随机值是", rand, "交给我吧！")
+                    # print("我是皮层元", self.id, "对特征", features[i], "的几率是", value, "随机值是", rand, "交给我吧！")
                     return True
         return False
 
@@ -62,17 +62,17 @@ class PalliumNeure:
         features = g.r.hkeys("palliumneure" + str(self.id))  # 获取所有keys的列表
         if len(features) == 0:
             return
-        print("皮层元进行反馈更新：我是皮层元", self.id, "特征列表是", features)
+        # print("皮层元进行反馈更新：我是皮层元", self.id, "特征列表是", features)
         count = 0
         for i in range(len(features) - 1, -1, -1):  # 倒序遍历
             value = g.r.hget("palliumneure" + str(self.id), features[i])
             newValue = float(value)-float(value)*(rate**count)
-            print("更新后,皮层元",self.id,"的特征",features[i],"的最新值是",newValue)
+            # print("更新后,皮层元",self.id,"的特征",features[i],"的最新值是",newValue)
             g.r.hset("palliumneure" + str(self.id), features[i], newValue)
             if newValue<=0:#移出这个特征
                 g.r.hdel("palliumneure" + str(self.id),features[i])
                 ttvalue = g.r.hget("palliumneure" + str(self.id), features[i])
-                print("已经删除了应该是None",ttvalue)
+                # print("已经删除了应该是None",ttvalue)
 
             count = count + 1
 
@@ -94,7 +94,7 @@ class Pallium:
 
 
     def receive(self,feature):
-        print("皮层收到一个特征...",feature)
+        # print("皮层收到一个特征...",feature)
         self.features.append(feature)
 
 
@@ -109,7 +109,7 @@ class Pallium:
         forwardScore = 0
         for i in self.palliumNeures:
             if i.activate:
-                print("我是激活的",i.id)
+                # print("我是激活的",i.id)
                 if i.id<3:
                     leftScore = leftScore+1
                 elif i.id>6:
@@ -119,15 +119,19 @@ class Pallium:
         #得出结论
         if leftScore>rightScore and leftScore>forwardScore:
             g.client.send("left")
+            print("指令是 left")
         elif rightScore > leftScore and rightScore > forwardScore:
             g.client.send("right")
+            print("指令是 right")
         elif forwardScore > leftScore and forwardScore > rightScore:
             g.client.send("forward")
+            print("指令是 forward")
         else:
-            print("没有明确动作，那么就做一个随机动作吧")
+            print("没有明确动作，做一个随机动作")
             g.client.send(np.random.choice(self.action))
 
-
+        #做出动作后等一下反馈
+        time.sleep(1)
         #查看当前的反馈情况
         if g.feedback.state == "collision":
             g.feedback.state = "update"#改变状态
@@ -137,7 +141,7 @@ class Pallium:
             g.pallium.update()
         else:
             print("当前没有发生碰撞！")
-        time.sleep(2)
+        time.sleep(1)
 
         #重置特征列表
         self.features = []
@@ -171,7 +175,7 @@ class Pallium:
 
     #对皮层元的更新
     def update(self):
-        print("皮层进行反馈...")
+        # print("皮层进行反馈...")
         for i in range(10):
             neure = self.palliumNeures[i]
             #让每个皮层元进行反馈更新

@@ -2,7 +2,6 @@ import g
 import cv2
 import os
 import guandao
-import tools.tool2
 
 train_path='ML_unity/training_data'
 imgWidth=1000
@@ -12,6 +11,15 @@ imgHeight=600
 class Retina:
     def __init__(self):
         print("视网膜初始化...")
+        # 通知unity截图
+        g.client.send("camera")
+
+        while g.run:
+            if g.feedback.state == "cameraok":
+                g.feedback.state = "default"
+                self.loadImg()
+
+
 
     def loadImg(self):
         image = cv2.imread(os.path.join(train_path, "0.jpg"))
@@ -22,5 +30,5 @@ class Retina:
         guandao.begin(rimg)
 
 if __name__=="__main__":
-    #通知unity截图
-    g.client.send("camera")
+    ret = Retina()
+

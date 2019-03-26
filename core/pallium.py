@@ -135,7 +135,7 @@ class Pallium:
         time.sleep(2)
         #查看当前的反馈情况
         if g.feedback.state == "collision":
-            g.feedback.state = "update"#改变状态
+            g.feedback.state = "default"#改变状态
             print("收到一个不好的反馈，接下来对自身做出调整！")
             # 进行一步反馈更新
             g.brain.update()

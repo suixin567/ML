@@ -3,7 +3,6 @@ import json
 import socket
 from threading import Thread
 import g
-import time
 
 class SocketModel(object):
         def __init__(self):
@@ -16,7 +15,6 @@ class SocketModel(object):
 
 class Client(object):
         def __init__(self):
-                self.run = True
                 HOST = '127.0.0.1'
                 PORT = 7999
                 self.s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -24,9 +22,10 @@ class Client(object):
                 #开启一个线程进行监听消息
                 self.th = Thread(target=self.listen, args=(99,))
                 self.th.start()
+                print("套接字初始化完成...");
 
         def listen(self,arg):
-                while self.run:
+                while g.run:
                         data = self.s.recv(1024)
                         self.receive(data)
 
@@ -41,15 +40,36 @@ class Client(object):
 
                 # print(model.Message)
                 if model.Message == "exit":
-                        self.run = False
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+                        print("收到退出指令----------------------》》》》")
+
+                        g.run = False
+
                 #发生了碰撞
                 if model.Message == "collision":
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
+                        print("收到消息：发生了碰撞---------------------------------")
                         g.feedback.state = "collision"
-                        print("收到消息：发生了碰撞")
-                        # time.sleep(2)
+
                 #unity截图完成
                 if model.Message == "cameraok":
-                        g.retina.loadImg()
+                        g.feedback.state = "cameraok"
 
 
 

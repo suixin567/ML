@@ -58,25 +58,23 @@ public class MessageManager : MonoBehaviour
 		//Debug.Log("收到了" + model.Message);
         switch (model.Message)
         {
-		case UnityProtocol.FORWARD:
-			
-                Driver.driver.forward();
-                break;
-            case UnityProtocol.LEFT:
-
-                Driver.driver.left();
-                break;
-            case UnityProtocol.RIGHT:
-
-                Driver.driver.right();
-                break;
+		case "0":			
+			ObjectsHolder.instance.Prediction (model.Message);
+            break;
+        case "1":
+			ObjectsHolder.instance.Prediction (model.Message);
+            break;
+        case "2":
+			ObjectsHolder.instance.Prediction (model.Message);
+            break;		
 		case UnityProtocol.CAMERA:
+			ObjectsHolder.instance.RandomObj ();
 			DriverCamera.instance.MakeCameraImg ();
 			ServerForUnity.server.SendMessage(1,2,3, "cameraok");
 			break;
 
             default:
-                Debug.LogError("未知协议...");
+			Debug.LogError("未知协议..."+model.Message);
                 break;
         }
     }

@@ -53,19 +53,20 @@ class Client(object):
 
                         g.run = False
 
-                #发生了碰撞
-                if model.Message == "collision":
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        print("收到消息：发生了碰撞---------------------------------")
-                        g.feedback.state = "collision"
+                if model.Message == "yes":
+                    print("收到消息：YYYYYYYYYY")
+                    print("收到消息：YYYYYYYYYY")
+                    print("收到消息：YYYYYYYYYY")
+                    print("收到消息：YYYYYYYYYY")
+                    print("收到消息：YYYYYYYYYY")
+
+                if model.Message == "no":
+                        print("收到消息：NNNNNNNNNNNN")
+                        print("收到消息：NNNNNNNNNNNN")
+                        print("收到消息：NNNNNNNNNNNN")
+                        print("收到消息：NNNNNNNNNNNN")
+                        print("收到消息：NNNNNNNNNNNN")
+                        g.feedback.state = "no"
 
                 #unity截图完成
                 if model.Message == "cameraok":

@@ -10,18 +10,16 @@ class Hippocampus:
     #收集激活的过滤器
     def collect_features(self,featureName):
         self.features.append(featureName)
-        print("收到一个激活过滤器", self.features)
+        print("海马收到一个激活过滤器", self.features)
 
     # 收集激活的过滤器完成，统一处理
     def collect_features_ok(self):
-        print("海马开始进行判断...")
+        print("海马开始进行判断...",len(self.features))
         if len(self.features) ==0:#应该继续循环
+            print("海马没有熟悉的特征组合，进入下一帧...")
             # 增加帧数
             print("增加帧数...")
             g.updateFrame()
-            # 通知unity截图
-            print("海马没有熟悉的特征组合，通知unity继续截图...")
-            g.client.send("camera")
             return
 
         # 判断为旧记忆还是新记忆 ，遍历所有之前的记忆
@@ -32,6 +30,9 @@ class Hippocampus:
             if featureList == self.features:
                 # print(len(self.features),featureList)
                 print("发现此历史记忆匹配",str(m) + '_shallow')
+                # 重置
+                self.features = []
+                print("海马重置", self.features)
                 g.brain.receive(str(m) + '_shallow')
                 # 对比具体挡位是否一致
                 # score = 0
@@ -56,5 +57,3 @@ class Hippocampus:
         # 增加帧数
         print("增加帧数...")
         g.updateFrame()
-        # 通知unity截图
-        g.client.send("camera")

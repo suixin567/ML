@@ -85,7 +85,7 @@ class Pallium:
         self.palliumNeures=[]
         self.features = []  # 当前帧皮层收到的特征列表
 
-        self.action=['left','right','forward']
+        self.actions=['0','1','2']
 
         for i in range(10):
                 palliumNeure = PalliumNeure(i)
@@ -118,31 +118,31 @@ class Pallium:
                     forwardScore = forwardScore+1
         #得出结论
         if leftScore>rightScore and leftScore>forwardScore:
-            g.client.send("left")
-            print("指令是 left")
+            g.client.send("0")
+            print("指令是 0")
         elif rightScore > leftScore and rightScore > forwardScore:
-            g.client.send("right")
-            print("指令是 right")
+            g.client.send("1")
+            print("指令是 1")
         elif forwardScore > leftScore and forwardScore > rightScore:
-            g.client.send("forward")
-            print("指令是 forward")
+            g.client.send("2")
+            print("指令是 2")
         else:
             print("没有明确动作，做一个随机动作")
-            g.client.send(np.random.choice(self.action))
+            g.client.send(np.random.choice(self.actions))
 
         #做出动作后等一下反馈
         print("等待反馈中...")
         time.sleep(2)
         #查看当前的反馈情况
-        if g.feedback.state == "collision":
+        if g.feedback.state == "no":
             g.feedback.state = "default"#改变状态
             print("收到一个不好的反馈，接下来对自身做出调整！")
             # 进行一步反馈更新
             g.brain.update()
             g.pallium.update()
         else:
-            print("当前没有发生碰撞！")
-        time.sleep(1)
+            print("刚才做出了正确的选择！")
+        time.sleep(3)
 
         #重置特征列表
         self.features = []
@@ -150,8 +150,6 @@ class Pallium:
         # 增加帧数
         print("增加帧数...")
         g.updateFrame()
-        # 通知unity截图
-        g.client.send("camera")
 
 
 

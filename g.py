@@ -26,6 +26,8 @@ def updateFrame():
     global frame
     r.set("frame",frame+1)
     frame  = frame+1
+    # 通知unity截图
+    client.send("camera")
 
 #全局brain
 brain = Brain()

@@ -26,7 +26,6 @@ public class ObjectsHolder : MonoBehaviour {
 			objs [i].SetActive (false);
 		}
 		currentIndex  = Random.Range(0,objs.Length );
-		Debug.Log ("做一个预测"+currentIndex);
 		objs [currentIndex].SetActive (true);
 	}
 

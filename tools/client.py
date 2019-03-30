@@ -66,11 +66,11 @@ class Client(object):
                         print("收到消息：NNNNNNNNNNNN")
                         print("收到消息：NNNNNNNNNNNN")
                         print("收到消息：NNNNNNNNNNNN")
-                        g.feedback.state = "no"
+                        g.feedback.update("no")
 
                 #unity截图完成
                 if model.Message == "cameraok":
-                        g.feedback.state = "cameraok"
+                        g.feedback.update("cameraok")
 
 
 

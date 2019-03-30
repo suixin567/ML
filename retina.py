@@ -16,7 +16,7 @@ class Retina:
 
         while g.run:
             if g.feedback.state == "cameraok":
-                g.feedback.state = "default"
+                g.feedback.update("default")
                 self.loadImg()
 
 

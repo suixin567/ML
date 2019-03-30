@@ -132,17 +132,16 @@ class Pallium:
 
         #做出动作后等一下反馈
         print("等待反馈中...")
-        time.sleep(2)
+        time.sleep(1)
         #查看当前的反馈情况
         if g.feedback.state == "no":
-            g.feedback.state = "default"#改变状态
+            g.feedback.update("default")#改变状态
             print("收到一个不好的反馈，接下来对自身做出调整！")
             # 进行一步反馈更新
             g.brain.update()
             g.pallium.update()
         else:
             print("刚才做出了正确的选择！")
-        time.sleep(3)
 
         #重置特征列表
         self.features = []

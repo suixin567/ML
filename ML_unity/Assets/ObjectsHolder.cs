@@ -27,6 +27,7 @@ public class ObjectsHolder : MonoBehaviour {
 		}
 		currentIndex  = Random.Range(0,objs.Length );
 		objs [currentIndex].SetActive (true);
+		print ("切换物体"+objs [currentIndex].name);
 	}
 
 	public void Prediction(string value){

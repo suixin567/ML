@@ -92,7 +92,7 @@ def collect_corner(image):
                 temp = engryArr[angleIndex]
                 temp = temp + 1
                 engryArr[angleIndex] = temp
-    print("角点能量分布", engryArr);
+    #print("角点能量分布", engryArr);
     old = int(g.frame) - 10000  # 检索之前的10000条数据
     if old < 0:
         old = 0
@@ -164,7 +164,7 @@ def collect_vertical(image):
                 temp = engryArr[angleIndex]
                 temp = temp + 1
                 engryArr[angleIndex] = temp
-    print("垂直能量分布", engryArr);
+    #print("垂直能量分布", engryArr);
 
     old = int(g.frame) - 10000  # 检索之前的10000条数据
     if old < 0:
@@ -207,7 +207,7 @@ def collect_horizontal(image):
                 temp = engryArr[angleIndex]
                 temp = temp + 1
                 engryArr[angleIndex] = temp
-    print("水平能量分布", engryArr);
+    #print("水平能量分布", engryArr);
 
     old = int(g.frame) - 10000  # 检索之前的10000条数据
     if old < 0:
@@ -251,7 +251,7 @@ def collect_left(image):
                 temp = engryArr[angleIndex]
                 temp = temp + 1
                 engryArr[angleIndex] = temp
-    print("向左能量分布", engryArr);
+    #print("向左能量分布", engryArr);
 
     old = int(g.frame) - 10000  # 检索之前的10000条数据
     if old < 0:
@@ -292,7 +292,7 @@ def collect_Right(image):
                 temp = engryArr[angleIndex]
                 temp = temp + 1
                 engryArr[angleIndex] = temp
-    print("向右能量分布", engryArr);
+    #print("向右能量分布", engryArr);
 
     old = int(g.frame) - 10000  # 检索之前的10000条数据
     if old < 0:

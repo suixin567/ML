@@ -105,7 +105,7 @@ class Pallium:
         forwardScore = 0
         for i in self.palliumNeures:
             if i.activate:
-                print("我是激活的",i.id)
+                #print("我是激活的",i.id)
                 if i.id<3:
                     leftScore = leftScore+1
                 elif i.id>6:
@@ -113,7 +113,7 @@ class Pallium:
                 else:
                     forwardScore = forwardScore+1
         #得出结论
-        print(leftScore,rightScore,forwardScore)
+        #print(leftScore,rightScore,forwardScore)
         if leftScore>rightScore and leftScore>forwardScore:
             g.client.send("0")
             print("指令是 0")
@@ -130,7 +130,7 @@ class Pallium:
 
         #做出动作后等一下反馈
         print("等待反馈中...")
-        time.sleep(1)
+        time.sleep(0.5)
         isok = False;
         #查看当前的反馈情况
         if g.feedback.state == "no":
@@ -140,18 +140,20 @@ class Pallium:
             g.brain.update()
             g.pallium.update()
             isok=False
+            time.sleep(200)
         else:
-            print("刚才做出了正确的选择！")
+            print("刚才做出了正确的选择！识别了一个物体，它的特征是：",self.features)
+            time.sleep(200)
             isok = True
 
         #重置特征列表
         self.features = []
-        print("重置皮层",self.features)
-        #重置元
+        print("重置皮层元",self.features)
         for i in self.palliumNeures:
             i.newFeatureAmount =0
             i.activate = False
-
+        #重置元
+        g.brain.reset()
         # 增加帧数
         print("增加帧数...")
         g.updateFrame(isok)

@@ -6,20 +6,18 @@ import random
 class Neure:
     def __init__(self,id,row):
         self.id = id
-        self.activate = False
         self.isEnd =False
         if row == 9:
             self.isEnd =True
         # print("元",id,row)
         self.newFeatureAmount=0#当前帧收到的最近特征个数，（只会传递相应个数的特征到下一层，太过之前的不会进行传递。）
-        self.newFeatureAmount2 = 0#更新时，确定更新特征的数量
+        #self.newFeatureAmount2 = 0#更新时，确定更新特征的数量
 
     def receive(self,feature):
-        self.activate =True
         self.newFeatureAmount= self.newFeatureAmount+1
-        self.newFeatureAmount2 = self.newFeatureAmount
+        #self.newFeatureAmount2 = self.newFeatureAmount
         # 最新收集到的特征强度为1
-        #print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",self.newFeatureAmount,"个特征")
+        print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",self.newFeatureAmount,"个特征")
         g.r.hset('neure'+str(self.id), feature, 1)
         #传递到皮层
         if self.isEnd:
@@ -62,10 +60,14 @@ class Neure:
         #         # print("已经删除了应该是None",ttvalue)
         #     count = count + 1
 
-
-        for i in range(len(features) - 1, len(features)-self.newFeatureAmount2-1, -1):  # 倒序遍历
+        #只更新上次收到的特征
+        for i in range(len(features) - 1, len(features)-self.newFeatureAmount-1, -1):  # 倒序遍历
             #print("元",self.id,"正在更新特征。",i);
-            g.r.hdel("neure" + str(self.id),features[i])
+            try:
+                ff= features[i]
+            except:
+                print(self.id,"错误",len(features),self.newFeatureAmount,i)
+            g.r.hdel("neure" + str(self.id), features[i])
             #ttvalue = g.r.hget("neure" + str(self.id), features[i])
             #print("已经删除了应该是None",ttvalue)
 

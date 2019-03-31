@@ -22,12 +22,15 @@ else:
 print("初始化redis...历史帧：", frame)
 
 
-def updateFrame():
+def updateFrame(isok=False):
     global frame
     r.set("frame",frame+1)
     frame  = frame+1
     # 通知unity截图
-    client.send("camera")
+    if isok ==True:#只有上次做对了才会切换物体。
+        client.send("camera")
+    else:
+        feedback.update("cameraok")
 
 #全局brain
 brain = Brain()

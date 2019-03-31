@@ -12,17 +12,19 @@ class Neure:
             self.isEnd =True
         # print("元",id,row)
         self.newFeatureAmount=0#当前帧收到的最近特征个数，（只会传递相应个数的特征到下一层，太过之前的不会进行传递。）
-
+        self.newFeatureAmount2 = 0#更新时，确定更新特征的数量
 
     def receive(self,feature):
         self.activate =True
         self.newFeatureAmount= self.newFeatureAmount+1
+        self.newFeatureAmount2 = self.newFeatureAmount
         # 最新收集到的特征强度为1
-        # print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",self.newFeatureAmount,"个特征")
+        #print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",self.newFeatureAmount,"个特征")
         g.r.hset('neure'+str(self.id), feature, 1)
         #传递到皮层
         if self.isEnd:
             g.pallium.receive(feature)
+            self.newFeatureAmount=0#这里必须重置。
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_
@@ -48,19 +50,23 @@ class Neure:
         if len(features) == 0:
             return
         # print("元进行反馈更新：我是元", self.id, "特征列表是", features)
-        count = 0
-        for i in range(len(features) - 1, -1, -1):  # 倒序遍历
-            value = g.r.hget("neure" + str(self.id), features[i])
-            newValue = float(value)-float(value)*(rate**count)
-            # print("更新后,元",self.id,"的特征",features[i],"的最新值是",newValue)
-            g.r.hset("neure" + str(self.id), features[i], newValue)
-            if newValue<=0:#移出这个特征
-                g.r.hdel("neure" + str(self.id),features[i])
-                ttvalue = g.r.hget("neure" + str(self.id), features[i])
-                # print("已经删除了应该是None",ttvalue)
+        # count = 0
+        # for i in range(len(features) - 1, -1, -1):  # 倒序遍历
+        #     value = g.r.hget("neure" + str(self.id), features[i])
+        #     newValue = float(value)-float(value)*(rate**count)
+        #     print("更新后,元",self.id,"的特征",features[i],"的最新值是",newValue)
+        #     g.r.hset("neure" + str(self.id), features[i], newValue)
+        #     if newValue<=0:#移出这个特征
+        #         g.r.hdel("neure" + str(self.id),features[i])
+        #         ttvalue = g.r.hget("neure" + str(self.id), features[i])
+        #         # print("已经删除了应该是None",ttvalue)
+        #     count = count + 1
 
-            count = count + 1
 
-
+        for i in range(len(features) - 1, len(features)-self.newFeatureAmount2-1, -1):  # 倒序遍历
+            #print("元",self.id,"正在更新特征。",i);
+            g.r.hdel("neure" + str(self.id),features[i])
+            #ttvalue = g.r.hget("neure" + str(self.id), features[i])
+            #print("已经删除了应该是None",ttvalue)
 
 

@@ -54,19 +54,21 @@ r = redis.Redis(connection_pool=pool)
 
 # arr = ['a','b','c','d','e','f']
 # print(arr[len(arr)-2:len(arr)])
-from threading import Thread
-import time
+# from threading import Thread
+# import time
+#
+# def talk(value):
+#     print("说话" ,value)
+#     while 1:
+#         time.sleep(3)
+#         print("说话2", value)
+#
+#
+#
+# p = Thread(target=talk, args=(1,))
+# p.start()
+# print("主线程")
 
-def talk(value):
-    print("说话" ,value)
-    while 1:
-        time.sleep(3)
-        print("说话2", value)
 
-
-
-p = Thread(target=talk, args=(1,))
-p.start()
-print("主线程")
-
-
+for i in range(0, 9):
+    print(i)

@@ -9,22 +9,12 @@ class PalliumNeure:
         self.id = id
         self.activate = False
         #print("皮层元",id)
+        self.newFeatureAmount=0#当前帧收到的最近特征个数，（只会传递相应个数的特征到下一层，太过之前的不会进行传递。）
 
 
     def receive(self,feature):
-        # self.activate =True
-        # print("我是皮层元", self.id, "收到最新的特征：", feature)
-        # g.r.rpush('palliumneure' + str(self.id), feature)
-        # # 先获取这个特征的intensity
-        # newIntensity = 0
-        # intensity = g.r.get("palliumneure" + str(self.id) + "_" + feature)
-        # if intensity == None:
-        #     newIntensity = 1
-        # else:
-        #     newIntensity = int(intensity) + 1  # 获取唯一索引号 int类型
-        # g.r.set("palliumneure" + str(self.id) + "_" + feature, newIntensity)
         self.activate = True
-
+        self.newFeatureAmount = self.newFeatureAmount + 1
         # 最新收集到的特征强度为1
         # print("我是皮层元", self.id, "收到最新的特征：", feature)
         g.r.hset('palliumneure' + str(self.id), feature, 1)
@@ -63,18 +53,24 @@ class PalliumNeure:
         if len(features) == 0:
             return
         # print("皮层元进行反馈更新：我是皮层元", self.id, "特征列表是", features)
-        count = 0
-        for i in range(len(features) - 1, -1, -1):  # 倒序遍历
-            value = g.r.hget("palliumneure" + str(self.id), features[i])
-            newValue = float(value)-float(value)*(rate**count)
-            # print("更新后,皮层元",self.id,"的特征",features[i],"的最新值是",newValue)
-            g.r.hset("palliumneure" + str(self.id), features[i], newValue)
-            if newValue<=0:#移出这个特征
-                g.r.hdel("palliumneure" + str(self.id),features[i])
-                ttvalue = g.r.hget("palliumneure" + str(self.id), features[i])
-                # print("已经删除了应该是None",ttvalue)
+        # count = 0
+        # for i in range(len(features) - 1, -1, -1):  # 倒序遍历
+        #     value = g.r.hget("palliumneure" + str(self.id), features[i])
+        #     newValue = float(value)-float(value)*(rate**count)
+        #     # print("更新后,皮层元",self.id,"的特征",features[i],"的最新值是",newValue)
+        #     g.r.hset("palliumneure" + str(self.id), features[i], newValue)
+        #     if newValue<=0:#移出这个特征
+        #         g.r.hdel("palliumneure" + str(self.id),features[i])
+        #         ttvalue = g.r.hget("palliumneure" + str(self.id), features[i])
+        #         # print("已经删除了应该是None",ttvalue)
+        #
+        #     count = count + 1
 
-            count = count + 1
+        for i in range(len(features) - 1,len(features)-self.newFeatureAmount -1, -1):  # 倒序遍历
+                #print("皮层元", self.id, "正在更新特征。", i);
+                g.r.hdel("palliumneure" + str(self.id), features[i])
+                #ttvalue = g.r.hget("palliumneure" + str(self.id), features[i])
+                #print("已经删除了应该是None",ttvalue)
 
 
 
@@ -103,13 +99,13 @@ class Pallium:
         #把特征分配给每个皮层元
         self.transmitMethod(self.features)
         #特征都分配给皮层元之后现在该做出判断了
-        print("现在该做出判断了",self.features);
+        #print("现在该做出判断了",self.features);
         leftScore = 0
         rightScore = 0
         forwardScore = 0
         for i in self.palliumNeures:
             if i.activate:
-                # print("我是激活的",i.id)
+                print("我是激活的",i.id)
                 if i.id<3:
                     leftScore = leftScore+1
                 elif i.id>6:
@@ -117,6 +113,7 @@ class Pallium:
                 else:
                     forwardScore = forwardScore+1
         #得出结论
+        print(leftScore,rightScore,forwardScore)
         if leftScore>rightScore and leftScore>forwardScore:
             g.client.send("0")
             print("指令是 0")
@@ -128,11 +125,13 @@ class Pallium:
             print("指令是 2")
         else:
             print("没有明确动作，做一个随机动作")
-            g.client.send(np.random.choice(self.actions))
+            # g.client.send(np.random.choice(self.actions))
+            g.feedback.update("no")  # 改变状态
 
         #做出动作后等一下反馈
         print("等待反馈中...")
         time.sleep(1)
+        isok = False;
         #查看当前的反馈情况
         if g.feedback.state == "no":
             g.feedback.update("default")#改变状态
@@ -140,17 +139,24 @@ class Pallium:
             # 进行一步反馈更新
             g.brain.update()
             g.pallium.update()
+            isok=False
         else:
             print("刚才做出了正确的选择！")
+            isok = True
 
         #重置特征列表
         self.features = []
         print("重置皮层",self.features)
+        #重置元
+        for i in self.palliumNeures:
+            i.newFeatureAmount =0
+            i.activate = False
+
         # 增加帧数
         print("增加帧数...")
-        g.updateFrame()
-
-
+        g.updateFrame(isok)
+        print("======================================================")
+        print("======================================================")
 
    #单个元的传递规则 根据特征List向下传递一层
     def  transmitMethod(self,featureList):

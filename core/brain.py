@@ -28,14 +28,14 @@ class Brain:
             for j in range(10):
                 neure=self.neures[i][j]
                 #获取这个元的特征列表（只获取当前帧的最新特征！！！）
-                allFeatureList = g.r.hkeys("neure"+str(neure.id))
-                neureFeatureList = allFeatureList[len(allFeatureList)-neure.newFeatureAmount:len(allFeatureList)]
+                allFeatureList = neure.frameFeatures
+                # neureFeatureList = allFeatureList[len(allFeatureList)-neure.newFeatureAmount:len(allFeatureList)]
                 #获取一个元的最新特征后，重置最新特征数！
                 #neure.newFeatureAmount = 0
 
-                if len(neureFeatureList)==0:#如果这个元此次没有接收到特征则跳过。
+                if len(allFeatureList)==0:#如果这个元此次没有接收到特征则跳过。
                     continue
-                self.transmitMethod(neureFeatureList,i+1)
+                self.transmitMethod(allFeatureList,i+1)
         #通知皮层当前帧的特征全部传完了
         g.pallium.receive_ok()
 
@@ -59,17 +59,10 @@ class Brain:
 
 
 
-    def update(self):
+    def update(self,isok):
         # print("脑进行反馈...")
         for i in range(10):
             for j in range(10):
                 neure = self.neures[i][j]
                 #让每个元进行反馈更新
-                neure.update()
-
-    def reset(self):
-
-        for i in range(10):
-            for j in range(10):
-                neure = self.neures[i][j]
-                neure.newFeatureAmount = 0
+                neure.update(isok)

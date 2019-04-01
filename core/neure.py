@@ -6,23 +6,24 @@ import random
 class Neure:
     def __init__(self,id,row):
         self.id = id
-        self.isEnd =False
-        if row == 9:
-            self.isEnd =True
+        # self.isEnd =False
+        # if row == 9:
+        #     self.isEnd =True
         # print("元",id,row)
-        self.newFeatureAmount=0#当前帧收到的最近特征个数，（只会传递相应个数的特征到下一层，太过之前的不会进行传递。）
-        #self.newFeatureAmount2 = 0#更新时，确定更新特征的数量
+        #self.newFeatureAmount=0#当前帧收到的最近特征个数，（只会传递相应个数的特征到下一层，太过之前的不会进行传递。）
+        self.frameFeatures=[]#当前帧收到的特征。
 
     def receive(self,feature):
-        self.newFeatureAmount= self.newFeatureAmount+1
+        self.frameFeatures.append(feature)
+        #self.newFeatureAmount= self.newFeatureAmount+1
         #self.newFeatureAmount2 = self.newFeatureAmount
         # 最新收集到的特征强度为1
-        print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",self.newFeatureAmount,"个特征")
-        g.r.hset('neure'+str(self.id), feature, 1)
+        print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",len(self.frameFeatures),"个特征")
+       # g.r.hset('neure'+str(self.id), feature, 1)
         #传递到皮层
-        if self.isEnd:
-            g.pallium.receive(feature)
-            self.newFeatureAmount=0#这里必须重置。
+        # if self.isEnd:
+        #     g.pallium.receive(feature)
+            # self.newFeatureAmount=0#这里必须重置。
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_
@@ -42,11 +43,20 @@ class Neure:
 
 
     #元的反馈更新todo: 这里存在问题：同一个元在同一帧内接受了多个特征的话，对每个特征的惩罚是递减的，但同一帧下应统一削弱。
-    def update(self):
-        rate =0.5#衰减率
-        features = g.r.hkeys("neure" + str(self.id))  # 获取所有keys的列表
-        if len(features) == 0:
-            return
+    def update(self,isok):
+        if len(self.frameFeatures)>0:
+            if isok == True:#好的反馈
+                for f in self.frameFeatures:
+                    g.r.hset('neure' + str(self.id), f, 1)
+                self.frameFeatures = []
+            else:#不好的反馈
+                self.frameFeatures = []
+
+
+
+        # features = g.r.hkeys("neure" + str(self.id))  # 获取所有keys的列表
+        # if len(features) == 0:
+        #     return
         # print("元进行反馈更新：我是元", self.id, "特征列表是", features)
         # count = 0
         # for i in range(len(features) - 1, -1, -1):  # 倒序遍历
@@ -61,13 +71,9 @@ class Neure:
         #     count = count + 1
 
         #只更新上次收到的特征
-        for i in range(len(features) - 1, len(features)-self.newFeatureAmount-1, -1):  # 倒序遍历
-            #print("元",self.id,"正在更新特征。",i);
-            try:
-                ff= features[i]
-            except:
-                print(self.id,"错误",len(features),self.newFeatureAmount,i)
-            g.r.hdel("neure" + str(self.id), features[i])
+        # for i in range(len(features) - 1, len(features)-self.newFeatureAmount-1, -1):  # 倒序遍历
+        #     print("元",self.id,"正在更新特征。",i,features[i]);
+        #     g.r.hdel("neure" + str(self.id), features[i])
             #ttvalue = g.r.hget("neure" + str(self.id), features[i])
             #print("已经删除了应该是None",ttvalue)
 

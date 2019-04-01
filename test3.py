@@ -69,6 +69,6 @@ r = redis.Redis(connection_pool=pool)
 # p.start()
 # print("主线程")
 
-
-for i in range(0, 9):
-    print(i)
+features = ['a','b','c','d','e']
+for i in range(len(features) - 1, len(features) - 2 - 1, -1):  # 倒序遍历
+    print(features[i])

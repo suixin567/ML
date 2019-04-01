@@ -72,3 +72,8 @@ r = redis.Redis(connection_pool=pool)
 features = ['a','b','c','d','e']
 for i in range(len(features) - 1, len(features) - 2 - 1, -1):  # 倒序遍历
     print(features[i])
+# index=0
+# for i in range(10):
+#     for j in range(10):
+#         index = index + 1
+#         print(index)

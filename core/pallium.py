@@ -19,8 +19,8 @@ class Pallium:
         leftScore = 0
         rightScore = 0
         forwardScore = 0
-        for n in range(90, 100):#遍历最后一排元
-            if len(n.frameFeatures)>0:
+        for n in range(10):#遍历最后一排元
+            if len(g.brain.neures[9][n].frameFeatures)>0:
                 if n<93:
                     leftScore = leftScore+1
                 elif n>96:
@@ -54,7 +54,7 @@ class Pallium:
             isok=False
             time.sleep(2)
         else:
-            print("刚才做出了正确的选择！识别了一个物体，它的特征是：",self.features)
+            print("刚才做出了正确的选择！")
             time.sleep(2)
             isok = True
         # 进行一步反馈更新

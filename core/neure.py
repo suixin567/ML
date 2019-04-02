@@ -6,24 +6,13 @@ import random
 class Neure:
     def __init__(self,id,row):
         self.id = id
-        # self.isEnd =False
-        # if row == 9:
-        #     self.isEnd =True
         # print("元",id,row)
-        #self.newFeatureAmount=0#当前帧收到的最近特征个数，（只会传递相应个数的特征到下一层，太过之前的不会进行传递。）
         self.frameFeatures=[]#当前帧收到的特征。
 
     def receive(self,feature):
         self.frameFeatures.append(feature)
-        #self.newFeatureAmount= self.newFeatureAmount+1
-        #self.newFeatureAmount2 = self.newFeatureAmount
         # 最新收集到的特征强度为1
         print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",len(self.frameFeatures),"个特征")
-       # g.r.hset('neure'+str(self.id), feature, 1)
-        #传递到皮层
-        # if self.isEnd:
-        #     g.pallium.receive(feature)
-            # self.newFeatureAmount=0#这里必须重置。
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_

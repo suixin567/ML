@@ -1,7 +1,6 @@
 import random
 import g
 import time
-import numpy as np
 
 class Pallium:
     def __init__(self):
@@ -12,18 +11,14 @@ class Pallium:
 
     def receive_ok(self):
         print("皮层接收ok")
-        #把特征分配给每个皮层元
-        #self.transmitMethod(self.features)
-        #特征都分配给皮层元之后现在该做出判断了
-        #print("现在该做出判断了",self.features);
         leftScore = 0
         rightScore = 0
         forwardScore = 0
         for n in range(10):#遍历最后一排元
             if len(g.brain.neures[9][n].frameFeatures)>0:
-                if n<93:
+                if 90+n<93:
                     leftScore = leftScore+1
-                elif n>96:
+                elif 90+n>96:
                     rightScore =rightScore+1
                 else:
                     forwardScore = forwardScore+1
@@ -40,7 +35,6 @@ class Pallium:
             print("指令是 2")
         else:
             print("没有明确动作，做一个随机动作")
-            # g.client.send(np.random.choice(self.actions))
             g.feedback.update("no")  # 改变状态
 
         #做出动作后等一下反馈

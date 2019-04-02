@@ -29,10 +29,6 @@ class Brain:
                 neure=self.neures[i][j]
                 #获取这个元的特征列表（只获取当前帧的最新特征！！！）
                 allFeatureList = neure.frameFeatures
-                # neureFeatureList = allFeatureList[len(allFeatureList)-neure.newFeatureAmount:len(allFeatureList)]
-                #获取一个元的最新特征后，重置最新特征数！
-                #neure.newFeatureAmount = 0
-
                 if len(allFeatureList)==0:#如果这个元此次没有接收到特征则跳过。
                     continue
                 self.transmitMethod(allFeatureList,i+1)

@@ -9,13 +9,13 @@ class Pallium:
         self.actions=['0','1','2']
 
 
-    def receive_ok(self):
+    def receive_ok(self,neureRows,neureColumns):
         print("皮层接收ok")
         leftScore = 0
         rightScore = 0
         forwardScore = 0
-        for n in range(10):#遍历最后一排元
-            if len(g.brain.neures[9][n].frameFeatures)>0:
+        for n in range(neureColumns):#遍历最后一排元
+            if len(g.brain.neures[neureRows-1][n].frameFeatures)>0:
                 if 90+n<93:
                     leftScore = leftScore+1
                 elif 90+n>96:

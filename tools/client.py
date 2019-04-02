@@ -3,6 +3,13 @@ import json
 import socket
 from threading import Thread
 import g
+from configobj import ConfigObj
+
+# 读取配置文件
+config = ConfigObj("conf.ini", encoding='UTF8')
+host = config['ml']['host']
+port = int(config['ml']['port'])
+
 
 class SocketModel(object):
         def __init__(self):
@@ -15,10 +22,8 @@ class SocketModel(object):
 
 class Client(object):
         def __init__(self):
-                HOST = '127.0.0.1'
-                PORT = 7999
                 self.s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-                self.s.connect((HOST, PORT))       #要连接的IP与端口
+                self.s.connect((host, port))       #要连接的IP与端口
                 #开启一个线程进行监听消息
                 self.th = Thread(target=self.listen, args=(99,))
                 self.th.start()

@@ -12,7 +12,7 @@ class Neure:
     def receive(self,feature):
         self.frameFeatures.append(feature)
         # 最新收集到的特征强度为1
-        print("我是元",self.id,"收到最新的特征：",feature,"当前帧我收到的第",len(self.frameFeatures),"个特征")
+        print("我是元",self.id,"收到特征：",feature,"第",len(self.frameFeatures),"个特征")
 
     #判断对某个特征的熟悉程度
     def familiar(self,feature): #feature的样子： 13_vertical_

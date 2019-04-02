@@ -1,8 +1,8 @@
-import redis
-import random
-
-pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0, decode_responses=True)  # 解决获取的值类型是bytes字节问题
-r = redis.Redis(connection_pool=pool)
+# import redis
+# import random
+#
+# pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0, decode_responses=True)  # 解决获取的值类型是bytes字节问题
+# r = redis.Redis(connection_pool=pool)
 #
 # valueList = ['a','b','c','d']
 # # for val in valueList:
@@ -69,11 +69,27 @@ r = redis.Redis(connection_pool=pool)
 # p.start()
 # print("主线程")
 
-features = ['a','b','c','d','e']
-for i in range(len(features) - 1, len(features) - 2 - 1, -1):  # 倒序遍历
-    print(features[i])
+# features = ['a','b','c','d','e']
+# for i in range(len(features) - 1, len(features) - 2 - 1, -1):  # 倒序遍历
+#     print(features[i])
 # index=0
 # for i in range(10):
 #     for j in range(10):
 #         index = index + 1
 #         print(index)
+
+
+
+
+# -*- coding: utf-8 -*-
+# python读取配置文件练习
+from configobj import ConfigObj
+#
+conf_ini = "test.ini"
+# config = ConfigObj(conf_ini,encoding='utf-8')
+config = ConfigObj(conf_ini,encoding='UTF8')
+#
+# 读配置文件
+#
+print (config['server'])
+print (config['server']['servername'])

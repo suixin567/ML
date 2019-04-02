@@ -2,10 +2,13 @@ import g
 import cv2
 import os
 import guandao
+from configobj import ConfigObj
 
-train_path='ML_unity/training_data'
-imgWidth=1000
-imgHeight=600
+# 读取配置文件
+config = ConfigObj("conf.ini", encoding='UTF8')
+imgWidth = int(config['ml']['imgWidth'])
+imgHeight = int(config['ml']['imgHeight'])
+train_path = config['ml']['train_path']
 
 
 class Retina:

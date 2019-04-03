@@ -29,7 +29,8 @@ public class MessageManager : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
 
             List<string> list = ServerForUnity.server.getList();
-            if (list == null) {
+            if (list == null)
+            {
                 continue;
             }
             for (int i = 0; i < 8; i++)
@@ -52,29 +53,20 @@ public class MessageManager : MonoBehaviour
     public void OnMessage(string modelStr)
     {
         SocketModel model = Coding<SocketModel>.decode(modelStr);
-        if (model == null) {
+        if (model == null)
+        {
             return;
         }
-		//Debug.Log("收到了" + model.Message);
+        //Debug.Log("收到了" + model.Message);
         switch (model.Message)
         {
-		case "0":			
-			ObjectsHolder.instance.Prediction (model.Message);
-            break;
-        case "1":
-			ObjectsHolder.instance.Prediction (model.Message);
-            break;
-        case "2":
-			ObjectsHolder.instance.Prediction (model.Message);
-            break;		
-		case UnityProtocol.CAMERA:
-			ObjectsHolder.instance.RandomObj ();
-			DriverCamera.instance.MakeCameraImg ();
-			ServerForUnity.server.SendMessage(1,2,3, "cameraok");
-			break;
-
+            case UnityProtocol.CAMERA:
+                ObjectsHolder.instance.RandomObj();
+                DriverCamera.instance.MakeCameraImg();
+                ServerForUnity.server.SendMessage(1, 2, 3,UnityProtocol.CAMERA_OK);
+                break;
             default:
-			Debug.LogError("未知协议..."+model.Message);
+                ObjectsHolder.instance.Prediction(model.Message);
                 break;
         }
     }

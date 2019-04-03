@@ -4,7 +4,7 @@ import tools.tool2
 import hippocampus2
 import g
 from numba import jit
-
+import datetime
 
 kernelV = np.array([[0,1,0],[0,1,0],[0,1,0]])
 kernelH = np.array([[0,0,0],[1,1,1],[0,0,0]])
@@ -34,8 +34,15 @@ def begin(activateimg):
     collect_left(leftResult)
 
     #右侧检测
+    starttime = datetime.datetime.now()
     rightResult = conv(activateimg, kernelRight)
+    endtime = datetime.datetime.now()
+    print(endtime - starttime)
+
+    starttime = datetime.datetime.now()
     collect_Right(leftResult)
+    endtime = datetime.datetime.now()
+    print(endtime - starttime)
 
     # 上报完成
     hipp2.collect_features_ok()

@@ -3,7 +3,7 @@ from core.pallium import Pallium
 from core.brain import Brain
 from core.feedback import Feedback
 import tools.client
-
+from core.feedback import State
 
 # 全局数据库
 pool = redis.ConnectionPool(host='127.0.0.1', port=6379, db=0, decode_responses=True)  # 解决获取的值类型是bytes字节问题
@@ -30,7 +30,7 @@ def updateFrame(isok=False):
     if isok ==True:#只有上次做对了才会切换物体。
         client.send("camera")
     else:
-        feedback.update("cameraok")
+        feedback.update(State.CAMERA_OK)
 
 #全局brain
 brain = Brain()

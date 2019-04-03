@@ -4,6 +4,7 @@ import socket
 from threading import Thread
 import g
 from configobj import ConfigObj
+from core.feedback import State
 
 # 读取配置文件
 config = ConfigObj("conf.ini", encoding='UTF8')
@@ -71,11 +72,11 @@ class Client(object):
                         print("收到消息：NNNNNNNNNNNN")
                         print("收到消息：NNNNNNNNNNNN")
                         print("收到消息：NNNNNNNNNNNN")
-                        g.feedback.update("no")
+                        g.feedback.update(State.NO)
 
                 #unity截图完成
                 if model.Message == "cameraok":
-                        g.feedback.update("cameraok")
+                        g.feedback.update(State.CAMERA_OK)
 
 
 

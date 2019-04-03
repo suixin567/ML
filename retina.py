@@ -3,6 +3,7 @@ import cv2
 import os
 import guandao
 from configobj import ConfigObj
+from core.feedback import State
 
 # 读取配置文件
 config = ConfigObj("conf.ini", encoding='UTF8')
@@ -18,8 +19,8 @@ class Retina:
         g.client.send("camera")
 
         while g.run:
-            if g.feedback.state == "cameraok":
-                g.feedback.update("default")
+            if g.feedback.state == State.CAMERA_OK:
+                g.feedback.update(State.DEFAULT)
                 self.loadImg()
 
 

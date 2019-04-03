@@ -1,6 +1,7 @@
 import random
 import g
 import time
+from core.feedback import State
 
 class Pallium:
     def __init__(self):
@@ -42,8 +43,7 @@ class Pallium:
         time.sleep(0.5)
         isok = False;
         #查看当前的反馈情况
-        if g.feedback.state == "no":
-            g.feedback.update("default")#改变状态
+        if g.feedback.state == State.NO:
             print("收到一个不好的反馈，接下来对自身做出调整！")
             isok=False
             time.sleep(2)

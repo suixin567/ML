@@ -26,17 +26,17 @@ class Pallium:
         #得出结论
         #print(leftScore,rightScore,forwardScore)
         if leftScore>rightScore and leftScore>forwardScore:
-            g.client.send("0")
+            g.client.send(self.actions[0])
             print("指令是 0")
         elif rightScore > leftScore and rightScore > forwardScore:
-            g.client.send("1")
+            g.client.send(self.actions[1])
             print("指令是 1")
         elif forwardScore > leftScore and forwardScore > rightScore:
-            g.client.send("2")
+            g.client.send(self.actions[2])
             print("指令是 2")
         else:
             print("没有明确动作，做一个随机动作")
-            g.feedback.update("no")  # 改变状态
+            g.feedback.update(State.NO)  # 改变状态
 
         #做出动作后等一下反馈
         print("等待反馈中...")

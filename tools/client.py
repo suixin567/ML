@@ -6,6 +6,16 @@ import g
 from configobj import ConfigObj
 from core.feedback import State
 
+
+#网络协议
+class Protocol(object):
+    EXIT = "exit"
+    CAMERA = "camera"
+    CAMERA_OK = "cameraok"
+    YES = "yes"
+    NO = "no"
+
+
 # 读取配置文件
 config = ConfigObj("conf.ini", encoding='UTF8')
 host = config['ml']['host']
@@ -18,6 +28,7 @@ class SocketModel(object):
                 self.Area = 2
                 self.Command = 3
                 self.Message = ""
+
 
 
 
@@ -45,7 +56,7 @@ class Client(object):
 
 
                 # print(model.Message)
-                if model.Message == "exit":
+                if model.Message == Protocol.EXIT:
                         print("收到退出指令----------------------》》》》")
                         print("收到退出指令----------------------》》》》")
                         print("收到退出指令----------------------》》》》")
@@ -59,14 +70,14 @@ class Client(object):
 
                         g.run = False
 
-                if model.Message == "yes":
+                if model.Message == Protocol.YES:
                     print("收到消息：YYYYYYYYYY")
                     print("收到消息：YYYYYYYYYY")
                     print("收到消息：YYYYYYYYYY")
                     print("收到消息：YYYYYYYYYY")
                     print("收到消息：YYYYYYYYYY")
 
-                if model.Message == "no":
+                if model.Message == Protocol.NO:
                         print("收到消息：NNNNNNNNNNNN")
                         print("收到消息：NNNNNNNNNNNN")
                         print("收到消息：NNNNNNNNNNNN")
@@ -75,7 +86,7 @@ class Client(object):
                         g.feedback.update(State.NO)
 
                 #unity截图完成
-                if model.Message == "cameraok":
+                if model.Message == Protocol.CAMERA_OK:
                         g.feedback.update(State.CAMERA_OK)
 
 
